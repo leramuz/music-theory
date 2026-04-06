@@ -1,0 +1,7 @@
+/node_modules
+AGENTS.md
+/.next/
+/build
+.env*
+next-env.d.ts
+.vscode
