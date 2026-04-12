@@ -7,7 +7,6 @@ const eslintConfig = defineConfig([
   ...nextTs,
   {
     rules: {
-      'no-console': 'error',
       'no-unused-vars': 'error',
       'import/order': [
         'error',

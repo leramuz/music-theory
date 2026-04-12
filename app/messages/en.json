@@ -1,4 +1,28 @@
 {
   "welcome": "Welcome to the music theory app!",
-  "buttonText": "Get Started"
+  "buttonText": "Get Started",
+  "language": {
+    "en": "English",
+    "de": "Deutsch"
+  },
+  "nav": {
+    "home": "Home",
+    "theory": "Theory",
+    "practice": "Practice"
+  },
+  "footer": {
+    "copyright": "© 2026 Music Theory App. All rights reserved."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or may have been moved.",
+    "goHome": "Go to home",
+    "tryAgain": "Reload home"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "retry": "Try again",
+    "goHome": "Go to home"
+  }
 }
