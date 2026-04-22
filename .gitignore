@@ -5,3 +5,4 @@ AGENTS.md
 .env*
 next-env.d.ts
 .vscode
+coverage/
