@@ -8,7 +8,8 @@
   "nav": {
     "home": "Home",
     "theory": "Theory",
-    "practice": "Practice"
+    "practice": "Practice",
+    "intervals": "Interval Training"
   },
   "footer": {
     "copyright": "© 2026 Music Theory App. All rights reserved."
@@ -24,5 +25,129 @@
     "description": "An unexpected error occurred. Please try again.",
     "retry": "Try again",
     "goHome": "Go to home"
+  },
+  "intervals": {
+    "perfectUnison": "Perfect Unison",
+    "minorSecond": "Minor 2nd",
+    "majorSecond": "Major 2nd",
+    "augmentedSecond": "Aug. 2nd",
+    "minorThird": "Minor 3rd",
+    "majorThird": "Major 3rd",
+    "perfectFourth": "Perfect 4th",
+    "augmentedFourth": "Aug. 4th (Tritone)",
+    "diminishedFourth": "Dim. 4th",
+    "perfectFifth": "Perfect 5th",
+    "augmentedFifth": "Aug. 5th",
+    "diminishedFifth": "Dim. 5th (Tritone)",
+    "minorSixth": "Minor 6th",
+    "majorSixth": "Major 6th",
+    "minorSeventh": "Minor 7th",
+    "majorSeventh": "Major 7th",
+    "diminishedSeventh": "Dim. 7th",
+    "perfectOctave": "Perfect Octave"
+  },
+  "practice": {
+    "startTraining": "Start Training",
+    "settings": {
+      "pianoRange": {
+        "title": "Piano Range",
+        "description": "Select the range of piano keys you want to use for interval training. The larger the range, the more diverse the intervals you'll hear!",
+        "options": {
+          "C3ToC4": "C3 - C4",
+          "C4ToC5": "C4 - C5",
+          "C5ToC6": "C5 - C6",
+          "C3ToC5": "C3 - C5",
+          "C4ToC6": "C4 - C6",
+          "C3ToC6": "C3 - C6"
+        }
+      },
+      "intervals": {
+        "title": "Intervals to Train",
+        "description": "Choose which intervals you want to practice. The more intervals you select, the more varied your training will be!",
+        "groups": {
+          "unisonsAndOctave": "Unisons & Octave",
+          "seconds": "Seconds",
+          "thirds": "Thirds",
+          "fourths": "Fourths",
+          "fifths": "Fifths",
+          "sixths": "Sixths",
+          "sevenths": "Sevenths"
+        }
+      },
+      "answerMode": {
+        "title": "Answer Mode",
+        "description": "How do you want to answer each question? Different modes will help you develop different skills. Try them all to find your favourite way to train!",
+        "modes": {
+          "select": {
+            "label": "Name It",
+            "desc": "Select the interval name"
+          },
+          "keyboard": {
+            "label": "Play It",
+            "desc": "Click the top note on a piano keyboard"
+          },
+          "sheet": {
+            "label": "Write It",
+            "desc": "Place the interval on a musical staff"
+          }
+        }
+      },
+      "playbackModes": {
+        "title": "Playback Mode",
+        "description": "Choose whether the intervals are played melodically (one after the other) or harmonically (at the same time). Melodic intervals help you recognize the individual sound of each note, while harmonic intervals train you to hear how the notes blend together!",
+        "modes": {
+          "melodic": "Melodic",
+          "harmonic": "Harmonic"
+        }
+      },
+      "accidental": {
+        "title": "Accidental",
+        "options": {
+          "none": "None",
+          "#": "Sharp (♯)",
+          "b": "Flat (♭)",
+          "x": "Double Sharp (𝄪)",
+          "n": "Natural (♮)",
+          "bb": "Double Flat (𝄫)"
+        }
+      }
+    },
+    "intervals": {
+      "title": "Interval Ear Training",
+      "description": "Train your ear with different intervals. Get a feel for each interval and improve your recognition skills. Get instant feedback to track your progress and master interval recognition!",
+      "question": {
+        "title": "What interval do you hear?",
+        "description": "Listen carefully, then submit your answer below.",
+        "play": "Play",
+        "settings": "Settings",
+        "submitAnswer": "Submit Answer"
+      },
+      "selectAnswer": {
+        "title": "Select the interval"
+      },
+      "keyboardAnswer": {
+        "title": "Click the top note",
+        "description": "The <blue>blue</blue> key is the bottom note. Click the key that completes the interval.",
+        "bottomNote": "Bottom note (given)",
+        "yourAnswer": "Your answer"
+      },
+      "sheetAnswer": {
+        "title": "Place the top note on the staff",
+        "description": "Select an accidental if needed, then click the staff to place the note."
+      },
+      "feedbackPhase": {
+        "correct": "Correct!",
+        "incorrect": "Not quite…",
+        "youAnswered": "You answered <strong>{answered}</strong> — the correct answer was <strong>{correct}</strong>.",
+        "thatsA": "That's a <strong>{interval}</strong>!",
+        "correctAnswerLabel": "Correct Answer",
+        "yourAnswerLabel": "Your Answer",
+        "playCorrectAriaLabel": "Play correct interval",
+        "playAnswerAriaLabel": "Play your answer",
+        "settings": "Settings",
+        "nextQuestion": "Next Question",
+        "unknownInterval": "Unknown Interval"
+      }
+    }
   }
 }

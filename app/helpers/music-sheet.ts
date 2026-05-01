@@ -3,8 +3,8 @@ import {
   NoteClickPayload,
   NoteDuration,
   StaveClickPayload,
-  VexFlowAccidental,
 } from '@/types/music-sheet';
+import { Accidental } from '@/types/accidental';
 
 const cloneMeasures = (measures: MeasureConfig[]): MeasureConfig[] =>
   measures.map((measure) => ({
@@ -23,7 +23,7 @@ export const addNoteToMusicSheet = (
   note: StaveClickPayload,
   duration: NoteDuration,
   voiceIndex: number,
-  accidentals: (VexFlowAccidental | null)[],
+  accidentals: (Accidental | null)[],
 ): MeasureConfig[] => {
   const { noteKey, measureIndex, staveIndex } = note;
   const newMeasures = cloneMeasures(measures);
@@ -51,7 +51,7 @@ export const updateNoteInMusicSheet = (
   updatedFields: Partial<{
     keys: string[];
     duration: NoteDuration;
-    accidentals: (VexFlowAccidental | null)[];
+    accidentals: (Accidental | null)[];
   }>,
 ): MeasureConfig[] => {
   const { measureIndex, staveIndex, voiceIndex, noteIndex } = note;

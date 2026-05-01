@@ -1,3 +1,5 @@
+import { Accidental } from '@/types/accidental';
+
 export const Clef = {
   TREBLE: 'treble',
   BASS: 'bass',
@@ -54,19 +56,11 @@ export const NoteDuration = {
 } as const;
 export type NoteDuration = (typeof NoteDuration)[keyof typeof NoteDuration];
 
-export const VexFlowAccidental = {
-  SHARP: '#',
-  DOUBLE_SHARP: '##',
-  FLAT: 'b',
-  DOUBLE_FLAT: 'bb',
-  NATURAL: 'n',
-} as const;
-export type VexFlowAccidental = (typeof VexFlowAccidental)[keyof typeof VexFlowAccidental];
-
 export type SheetNote = {
   keys: string[];
   duration: NoteDuration;
-  accidentals?: (VexFlowAccidental | null)[];
+  accidentals?: (Accidental | null)[];
+  highlight?: string;
 };
 
 export type StaveConfig = {

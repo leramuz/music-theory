@@ -1,10 +1,20 @@
 import { PublicDesktopNavigation } from '@/components/nav/desktop';
 import { PublicMobileNavigation } from '@/components/nav/mobile';
 
-const navItems = [
+export interface NavItem {
+  href: string;
+  label: string;
+  children?: NavItem[];
+}
+
+const navItems: NavItem[] = [
   { href: '/', label: 'nav.home' },
   { href: '/theory', label: 'nav.theory' },
-  { href: '/practice', label: 'nav.practice' },
+  {
+    href: '/practice',
+    label: 'nav.practice',
+    children: [{ href: '/practice/intervals', label: 'nav.intervals' }],
+  },
 ];
 
 export const Navigation = () => {

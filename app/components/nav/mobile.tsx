@@ -6,9 +6,10 @@ import { X, Menu } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { Logo } from '@/components/logo';
+import { NavItem } from '@/components/nav/navigation';
 
 interface PublicMobileNavigationProps {
-  navItems: { href: string; label: string }[];
+  navItems: NavItem[];
 }
 
 export function PublicMobileNavigation({ navItems }: PublicMobileNavigationProps) {
@@ -20,7 +21,7 @@ export function PublicMobileNavigation({ navItems }: PublicMobileNavigationProps
   };
 
   return (
-    <nav className="flex justify-between items-center w-full px-4 py-2 h-14">
+    <nav className="flex justify-between items-center w-full px-4 py-2 h-14 bg-background">
       <Logo width={80} />
       <div className="flex items-center gap-4">
         <button
@@ -36,14 +37,29 @@ export function PublicMobileNavigation({ navItems }: PublicMobileNavigationProps
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <nav className="flex flex-col space-y-6">
               {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-foreground/80 hover:text-foreground transition-colors duration-200 font-medium text-base tracking-wide py-2"
-                  onClick={handleNavClick}
-                >
-                  {t(item.label)}
-                </Link>
+                <div key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-foreground/80 hover:text-foreground transition-colors duration-200 font-medium text-base tracking-wide py-2"
+                    onClick={handleNavClick}
+                  >
+                    {t(item.label)}
+                  </Link>
+                  {item.children && (
+                    <div className="mt-2 ml-4 flex flex-col space-y-3">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="text-foreground/60 hover:text-foreground transition-colors duration-200 text-sm tracking-wide py-1"
+                          onClick={handleNavClick}
+                        >
+                          {t(child.label)}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
 
               <div className="self-end">
