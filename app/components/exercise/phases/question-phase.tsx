@@ -6,6 +6,7 @@ import { Accidental } from '@/types/accidental';
 import { MeasureConfig, StaveClickPayload } from '@/types/music-sheet';
 import { AnswerMode } from '@/types/answer-mode';
 import { RangeOption } from '@/types/range-option';
+import { Key } from '@/types/key';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { KeyHighlightColor } from '@/components/interactive-piano';
@@ -21,6 +22,7 @@ type QuestionPhaseProps = {
   onSelectAnswer: (_i: Interval) => void;
   enabledIntervals: Set<Interval>;
   range: RangeOption;
+  musicalKey: Key | null;
   highlightedKeys: { id: PianoKeyId; color: KeyHighlightColor }[];
   bottomKeyId: PianoKeyId | null;
   onKeyboardAnswer: (_id: PianoKeyId) => void;
@@ -29,6 +31,7 @@ type QuestionPhaseProps = {
   sheetAccidental: Accidental | null;
   onSheetAccidentalChange: (_a: Accidental | null) => void;
   onSheetAnswer: (_payload: StaveClickPayload) => void;
+  measureWidth: number;
   canSubmit: boolean;
   onSubmit: () => void;
   onBackToSettings: () => void;
@@ -43,6 +46,7 @@ export const QuestionPhase = ({
   onSelectAnswer,
   enabledIntervals,
   range,
+  musicalKey,
   highlightedKeys,
   bottomKeyId,
   onKeyboardAnswer,
@@ -51,6 +55,7 @@ export const QuestionPhase = ({
   sheetAccidental,
   onSheetAccidentalChange,
   onSheetAnswer,
+  measureWidth,
   canSubmit,
   onSubmit,
   onBackToSettings,
@@ -93,6 +98,8 @@ export const QuestionPhase = ({
           bottomSpelling={question.bottom}
           enabledIntervals={enabledIntervals}
           range={range}
+          musicalKey={musicalKey}
+          measureWidth={measureWidth}
           onAccidentalChange={onSheetAccidentalChange}
           onNotePlace={onSheetAnswer}
         />

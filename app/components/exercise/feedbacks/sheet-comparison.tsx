@@ -4,6 +4,7 @@ import { playInterval } from '@/helpers/audio';
 import { makeIntervalMeasure } from '@/helpers/interval-sheet';
 import { Interval, IntervalInstance } from '@/types/interval';
 import { PlaybackMode } from '@/types/playback-mode';
+import { Key } from '@/types/key';
 import { MusicSheet } from '@/components/music-sheet/music-sheet';
 import { ComparisonCard } from '@/components/exercise/feedbacks/common/comparison-card';
 
@@ -13,6 +14,8 @@ type SheetComparisonProps = {
   answeredInterval: Interval | null;
   answeredIntervalInstance: IntervalInstance | null;
   playbackMode: PlaybackMode;
+  musicalKey: Key | null;
+  measureWidth: number;
 };
 
 export const SheetComparison = ({
@@ -21,18 +24,29 @@ export const SheetComparison = ({
   answeredInterval,
   answeredIntervalInstance,
   playbackMode,
+  musicalKey,
+  measureWidth,
 }: SheetComparisonProps) => {
   const correctMeasures = useMemo(
-    () => [makeIntervalMeasure(question.bottom, question.top)],
-    [question],
+    () => [makeIntervalMeasure(question.bottom, question.top, undefined, musicalKey)],
+    [question, musicalKey],
   );
   const answeredMeasures = useMemo(
     () =>
       answeredIntervalInstance
-        ? [makeIntervalMeasure(answeredIntervalInstance.bottom, answeredIntervalInstance.top)]
+        ? [
+            makeIntervalMeasure(
+              answeredIntervalInstance.bottom,
+              answeredIntervalInstance.top,
+              undefined,
+              musicalKey,
+            ),
+          ]
         : null,
-    [answeredIntervalInstance],
+    [answeredIntervalInstance, musicalKey],
   );
+
+  console.log('measrueWidth in sheet comparison', measureWidth);
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -43,7 +57,12 @@ export const SheetComparison = ({
         onPlay={() => playInterval(question, playbackMode)}
         ariaLabel="practice.intervals.feedbackPhase.playCorrectAriaLabel"
       >
-        <MusicSheet measures={correctMeasures} disableInteractions={true} measureWidth={200} />
+        <MusicSheet
+          measures={correctMeasures}
+          disableInteractions={true}
+          measureWidth={measureWidth}
+          musicalKey={musicalKey}
+        />
       </ComparisonCard>
 
       {answeredIntervalInstance && answeredMeasures && (
@@ -58,7 +77,12 @@ export const SheetComparison = ({
           onPlay={() => playInterval(answeredIntervalInstance, playbackMode)}
           ariaLabel="practice.intervals.feedbackPhase.playAnswerAriaLabel"
         >
-          <MusicSheet measures={answeredMeasures} disableInteractions={true} measureWidth={200} />
+          <MusicSheet
+            measures={answeredMeasures}
+            disableInteractions={true}
+            measureWidth={measureWidth}
+            musicalKey={musicalKey}
+          />
         </ComparisonCard>
       )}
     </div>

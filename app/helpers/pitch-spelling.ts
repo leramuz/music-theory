@@ -74,25 +74,5 @@ export const letterAtDiatonicStep = (pitch: PitchSpelling, steps: number): Natur
   return NATURAL_NOTES[(idx + steps) % NATURAL_NOTES.length];
 };
 
-export const adaptVexKeyToSpelling = (
-  vexKey: string,
-  accidental: Accidental | null,
-): PitchSpelling => {
-  const [notePart, octave] = vexKey.split('/');
-
-  if (!notePart || octave === undefined || octave === '') {
-    throw new Error(`Invalid vexKey: ${vexKey}`);
-  }
-
-  return `${notePart.toUpperCase()}${accidental ?? ''}${octave}` as PitchSpelling;
-};
-
-export const adaptSpellingToVexKey = (spelling: PitchSpelling): string => {
-  const letter = spelling[0].toLowerCase();
-  const octave = spelling[spelling.length - 1];
-
-  return `${letter}/${octave}`;
-};
-
 export const naturalSpelling = (spelling: PitchSpelling): PitchSpelling =>
   `${spelling[0]}${spelling[spelling.length - 1]}` as PitchSpelling;

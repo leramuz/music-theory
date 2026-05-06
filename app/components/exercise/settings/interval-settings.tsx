@@ -11,10 +11,19 @@ const INTERVAL_GROUPS_CONFIG: { labelKey: string; intervals: Interval[] }[] = [
     intervals: [Interval.MINOR_SECOND, Interval.MAJOR_SECOND, Interval.AUGMENTED_SECOND],
   },
   { labelKey: 'thirds', intervals: [Interval.MINOR_THIRD, Interval.MAJOR_THIRD] },
-  { labelKey: 'fourths', intervals: [Interval.PERFECT_FOURTH, Interval.AUGMENTED_FOURTH] },
-  { labelKey: 'fifths', intervals: [Interval.DIMINISHED_FIFTH, Interval.PERFECT_FIFTH] },
+  {
+    labelKey: 'fourths',
+    intervals: [Interval.DIMINISHED_FOURTH, Interval.PERFECT_FOURTH, Interval.AUGMENTED_FOURTH],
+  },
+  {
+    labelKey: 'fifths',
+    intervals: [Interval.DIMINISHED_FIFTH, Interval.PERFECT_FIFTH, Interval.AUGMENTED_FIFTH],
+  },
   { labelKey: 'sixths', intervals: [Interval.MINOR_SIXTH, Interval.MAJOR_SIXTH] },
-  { labelKey: 'sevenths', intervals: [Interval.MINOR_SEVENTH, Interval.MAJOR_SEVENTH] },
+  {
+    labelKey: 'sevenths',
+    intervals: [Interval.MINOR_SEVENTH, Interval.MAJOR_SEVENTH, Interval.DIMINISHED_SEVENTH],
+  },
 ];
 
 type IntervalSettingsProps = {

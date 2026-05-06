@@ -8,11 +8,13 @@ import {
   intervalSpellingComplexity,
   intervalTypeFromInstance,
   randomIntervalInstanceInRange,
+  randomIntervalInstanceInKey,
   fittingIntervalsInRange,
   resolveKeyboardIntervalInstance,
 } from '@/helpers/interval';
 import { Interval, IntervalInstance } from '@/types/interval';
 import { PianoKeyId } from '@/types/piano-key';
+import { PitchSpelling } from '@/types/pitch-spelling';
 
 describe('diatonicSteps', () => {
   it('returns 0 for a unison (P1)', () => {
@@ -271,5 +273,63 @@ describe('resolveKeyboardIntervalInstance', () => {
       new Set([Interval.DIMINISHED_FOURTH]),
     );
     expect(result3).toEqual({ bottom: 'E4', top: 'Ab4' });
+  });
+
+  it('prefers the scale spelling when scaleSpellings are provided', () => {
+    // C minor harmonic has Ab (not G#) — so Eb4→Ab4 should resolve as diminished fourth
+    const cMinorScale: PitchSpelling[] = ['C4', 'D4', 'Eb4', 'F4', 'G4', 'Ab4', 'Bn4'];
+    const result = resolveKeyboardIntervalInstance(
+      'Eb4',
+      PianoKeyId.Gs4,
+      new Set(Object.values(Interval)),
+      cMinorScale,
+    );
+    expect(result?.top).toBe('Ab4');
+  });
+
+  it('falls back to all spellings when the key has no matching spelling at that piano key', () => {
+    // Scale does not contain G#/Ab — should still return something
+    const scale: PitchSpelling[] = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'];
+    const result = resolveKeyboardIntervalInstance(
+      'C4',
+      PianoKeyId.Gs4,
+      new Set(Object.values(Interval)),
+      scale,
+    );
+    // Falls back: picks simplest enharmonic (Ab4 = minor sixth is simpler than G#4 = augmented fifth)
+    expect(result).not.toBeNull();
+  });
+});
+
+describe('randomIntervalInstanceInKey', () => {
+  const cMajorScale: PitchSpelling[] = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+  const allIntervals = new Set(Object.values(Interval));
+
+  it('returns an instance whose interval type is in the enabled set', () => {
+    const result = randomIntervalInstanceInKey(allIntervals, cMajorScale);
+    expect(result).not.toBeNull();
+    const type = intervalTypeFromInstance(result!);
+    expect(allIntervals.has(type)).toBe(true);
+  });
+
+  it('returns only instances using spellings from the scale', () => {
+    const result = randomIntervalInstanceInKey(allIntervals, cMajorScale);
+    expect(result).not.toBeNull();
+    expect(cMajorScale).toContain(result!.bottom);
+    expect(cMajorScale).toContain(result!.top);
+  });
+
+  it('returns null when no enabled intervals exist between any scale degree pair', () => {
+    // P1 only — but j starts at i so unisons are included; use an interval impossible in C major
+    const impossibleIntervals = new Set([Interval.AUGMENTED_SECOND]);
+    const result = randomIntervalInstanceInKey(impossibleIntervals, cMajorScale);
+    expect(result).toBeNull();
+  });
+
+  it('respects the enabled intervals filter', () => {
+    const onlyPerfectFifth = new Set([Interval.PERFECT_FIFTH]);
+    const result = randomIntervalInstanceInKey(onlyPerfectFifth, cMajorScale);
+    expect(result).not.toBeNull();
+    expect(intervalTypeFromInstance(result!)).toBe(Interval.PERFECT_FIFTH);
   });
 });

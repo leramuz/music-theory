@@ -164,10 +164,23 @@ export const resolveKeyboardIntervalInstance = (
   bottom: PitchSpelling,
   topKeyId: PianoKeyId,
   enabledIntervals: Set<Interval>,
+  scaleSpellings?: PitchSpelling[],
 ): IntervalInstance | null => {
   const topKey = getPianoKeyById(topKeyId);
 
-  const candidates = topKey.spellings.flatMap((spelling) => {
+  // When scale spellings are available, prefer the spelling that matches the scale
+  // (e.g. Ab over G# in C minor). Strip octave to match across registers.
+  const scaleLetterAccidentals = scaleSpellings
+    ? new Set(scaleSpellings.map((s) => s.slice(0, -1)))
+    : null;
+  const spellingPool =
+    scaleLetterAccidentals !== null
+      ? topKey.spellings.filter((s) => scaleLetterAccidentals.has(s.slice(0, -1))).length > 0
+        ? topKey.spellings.filter((s) => scaleLetterAccidentals.has(s.slice(0, -1)))
+        : topKey.spellings
+      : topKey.spellings;
+
+  const candidates = spellingPool.flatMap((spelling) => {
     try {
       const instance = { bottom, top: spelling };
       return enabledIntervals.has(intervalTypeFromInstance(instance)) ? [instance] : [];
@@ -177,4 +190,30 @@ export const resolveKeyboardIntervalInstance = (
   });
 
   return candidates.length > 0 ? simplestInterval(candidates) : null;
+};
+
+export const randomIntervalInstanceInKey = (
+  enabledIntervals: Set<Interval>,
+  scaleSpellings: PitchSpelling[],
+): IntervalInstance | null => {
+  const candidates: IntervalInstance[] = [];
+
+  for (let i = 0; i < scaleSpellings.length; i++) {
+    for (let j = i; j < scaleSpellings.length; j++) {
+      try {
+        const instance: IntervalInstance = {
+          bottom: scaleSpellings[i],
+          top: scaleSpellings[j],
+        };
+
+        if (enabledIntervals.has(intervalTypeFromInstance(instance))) {
+          candidates.push(instance);
+        }
+      } catch {
+        // unrecognized interval — skip
+      }
+    }
+  }
+
+  return candidates.length > 0 ? randomElement(candidates) : null;
 };

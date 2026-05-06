@@ -96,7 +96,8 @@
         "title": "Abspielmodus",
         "description": "Wähle, ob die Intervalle melodisch (nacheinander) oder harmonisch (gleichzeitig) abgespielt werden sollen. Melodische Intervalle helfen dir, die individuelle Klangfarbe jedes Tons zu erkennen, während harmonische Intervalle dir beibringen, wie die Töne zusammenklingen!",
         "modes": {
-          "melodic": "Melodisch",
+          "melodic-ascending": "Melodisch Aufsteigend",
+          "melodic-descending": "Melodisch Absteigend",
           "harmonic": "Harmonisch"
         }
       },
@@ -106,9 +107,40 @@
           "none": "Keines",
           "#": "Kreuz (♯)",
           "b": "Be (♭)",
-          "x": "Doppelkreuz (𝄪)",
+          "##": "Doppelkreuz (𝄪)",
           "n": "Auflösungszeichen (♮)",
           "bb": "Doppel-Be (𝄫)"
+        }
+      },
+      "key": {
+        "title": "Tonart",
+        "none": "Keine",
+        "scales": {
+          "major": "Dur",
+          "harmonicMinor": "Harmonisches Moll"
+        },
+        "rootNote": {
+          "title": "Grundton",
+          "options": {
+            "C": "C",
+            "C#": "Cis",
+            "Db": "Des",
+            "D": "D",
+            "D#": "Dis",
+            "Eb": "Es",
+            "E": "E",
+            "F": "F",
+            "F#": "Fis",
+            "Gb": "Ges",
+            "G": "G",
+            "G#": "Gis",
+            "Ab": "As",
+            "A": "A",
+            "A#": "Ais",
+            "Bb": "B",
+            "B": "H",
+            "Cb": "Ces"
+          }
         }
       }
     },

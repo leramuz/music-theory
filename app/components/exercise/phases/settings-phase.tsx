@@ -3,10 +3,12 @@ import { Interval } from '@/types/interval';
 import { PlaybackMode } from '@/types/playback-mode';
 import { AnswerMode } from '@/types/answer-mode';
 import { RangeOption } from '@/types/range-option';
+import { Key } from '@/types/key';
 import { AnswerModeSettings } from '@/components/exercise/settings/answer-mode-settings';
 import { IntervalSettings } from '@/components/exercise/settings/interval-settings';
 import { PianoRangeSettings } from '@/components/exercise/settings/piano-range-settings';
 import { PlaybackModeSettings } from '@/components/exercise/settings/playback-mode-settings';
+import { KeySettings } from '@/components/exercise/settings/key-settings';
 import { Button } from '@/components/ui/button';
 
 type SettingsPhaseProps = {
@@ -15,6 +17,8 @@ type SettingsPhaseProps = {
   intervalOptions: Interval[];
   enabledIntervals: Set<Interval>;
   onToggleInterval: (_i: Interval) => void;
+  musicalKey: Key | null;
+  onKeyChange: (_k: Key | null) => void;
   answerMode: AnswerMode;
   onAnswerModeChange: (_m: AnswerMode) => void;
   playbackMode: PlaybackMode;
@@ -28,6 +32,8 @@ export const SettingsPhase = ({
   intervalOptions,
   enabledIntervals,
   onToggleInterval,
+  musicalKey,
+  onKeyChange,
   answerMode,
   onAnswerModeChange,
   playbackMode,
@@ -39,6 +45,7 @@ export const SettingsPhase = ({
   return (
     <div className="space-y-5">
       <PianoRangeSettings range={range} onRangeChange={onRangeChange} />
+      <KeySettings musicalKey={musicalKey} onKeyChange={onKeyChange} />
       <IntervalSettings
         intervalOptions={intervalOptions}
         enabledIntervals={enabledIntervals}

@@ -1,7 +1,8 @@
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { getPianoKeyBySpelling, isPianoKeyInRange } from '@/helpers/piano-key';
-import { adaptVexKeyToSpelling, naturalSpelling } from '@/helpers/pitch-spelling';
+import { naturalSpelling } from '@/helpers/pitch-spelling';
+import { adaptVexflowSpellingToSpelling } from '@/helpers/vexflow';
 import { maxChromaticSize } from '@/helpers/interval';
 import { pianoRangeFromOption } from '@/helpers/range-option';
 import { MeasureConfig, StaveClickPayload } from '@/types/music-sheet';
@@ -9,6 +10,7 @@ import { Accidental } from '@/types/accidental';
 import { Interval } from '@/types/interval';
 import { PitchSpelling } from '@/types/pitch-spelling';
 import { RangeOption } from '@/types/range-option';
+import { Key } from '@/types/key';
 import { Card } from '@/components/ui/card';
 import { MusicSheet } from '@/components/music-sheet/music-sheet';
 import { AccidentalSettings } from '@/components/exercise/settings/accidental-settings';
@@ -20,6 +22,8 @@ type SheetAnswerProps = {
   bottomSpelling: PitchSpelling;
   enabledIntervals: Set<Interval>;
   range: RangeOption;
+  musicalKey: Key | null;
+  measureWidth: number;
   onNotePlace: (_payload: StaveClickPayload) => void;
   onAccidentalChange: (_accidental: Accidental | null) => void;
 };
@@ -31,6 +35,8 @@ export const SheetAnswer = ({
   bottomSpelling,
   enabledIntervals,
   range,
+  musicalKey,
+  measureWidth,
   onNotePlace,
   onAccidentalChange,
 }: SheetAnswerProps) => {
@@ -46,8 +52,12 @@ export const SheetAnswer = ({
 
     return (noteKey: string) => {
       try {
-        const naturalClickedKeyId = getPianoKeyBySpelling(adaptVexKeyToSpelling(noteKey, null)).id;
-        const key = getPianoKeyBySpelling(adaptVexKeyToSpelling(noteKey, accidental));
+        const naturalClickedKeyId = getPianoKeyBySpelling(
+          adaptVexflowSpellingToSpelling(noteKey, null),
+        ).id;
+        const key = getPianoKeyBySpelling(
+          adaptVexflowSpellingToSpelling(noteKey, accidental, musicalKey),
+        );
         return (
           isPianoKeyInRange(key.id, pianoRange) &&
           naturalClickedKeyId >= naturalBottomKeyId &&
@@ -57,7 +67,7 @@ export const SheetAnswer = ({
         return false;
       }
     };
-  }, [range, accidental, bottomSpelling, enabledIntervals]);
+  }, [range, accidental, bottomSpelling, enabledIntervals, musicalKey]);
 
   return (
     <Card className="p-5 space-y-4">
@@ -76,8 +86,9 @@ export const SheetAnswer = ({
 
       <div className="overflow-x-auto">
         <MusicSheet
-          measureWidth={200}
+          measureWidth={measureWidth}
           measures={measures}
+          musicalKey={musicalKey}
           disableNoteHighlight={true}
           onStaveClick={onNotePlace}
           isValidStavePosition={isValidStavePosition}

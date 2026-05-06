@@ -11,22 +11,26 @@ import { Button } from '@/components/ui/button';
 import { SelectComparison } from '@/components/exercise/feedbacks/select-comparison';
 import { SheetComparison } from '@/components/exercise/feedbacks/sheet-comparison';
 import { KeyboardComparison } from '@/components/exercise/feedbacks/keyboard-comparison';
+import { Key } from '@/types/key';
 
 type FeedbackPhaseProps = {
   answerMode: AnswerMode;
   question: IntervalInstance;
+  musicalKey: Key | null;
   isCorrect: boolean;
   correctInterval: Interval;
   answeredInterval: Interval | null;
   answeredIntervalInstance: IntervalInstance | null;
   playbackMode: PlaybackMode;
   range: RangeOption;
+  measureWidth: number;
   onNext: () => void;
   onBackToSettings: () => void;
 };
 
 export const FeedbackPhase = ({
   question,
+  musicalKey,
   isCorrect,
   correctInterval,
   answeredInterval,
@@ -34,6 +38,7 @@ export const FeedbackPhase = ({
   playbackMode,
   answerMode,
   range,
+  measureWidth,
   onNext,
   onBackToSettings,
 }: FeedbackPhaseProps) => {
@@ -100,11 +105,13 @@ export const FeedbackPhase = ({
         <ComparisonSection
           answerMode={answerMode}
           question={question}
+          musicalKey={musicalKey}
           correctInterval={correctInterval}
           answeredInterval={answeredInterval}
           answeredIntervalInstance={answeredIntervalInstance}
           playbackMode={playbackMode}
           range={range}
+          measureWidth={measureWidth}
         />
       )}
 
@@ -128,8 +135,10 @@ type ComparisonSectionProps = {
   correctInterval: Interval;
   answeredInterval: Interval | null;
   answeredIntervalInstance: IntervalInstance | null;
+  measureWidth: number;
   playbackMode: PlaybackMode;
   range: RangeOption;
+  musicalKey: Key | null;
 };
 
 const ComparisonSection = ({
@@ -140,6 +149,8 @@ const ComparisonSection = ({
   answeredIntervalInstance,
   playbackMode,
   range,
+  musicalKey,
+  measureWidth,
 }: ComparisonSectionProps) => {
   if (answerMode === AnswerMode.SELECT)
     return answeredInterval ? (
@@ -171,6 +182,8 @@ const ComparisonSection = ({
       answeredInterval={answeredInterval}
       answeredIntervalInstance={answeredIntervalInstance}
       playbackMode={playbackMode}
+      musicalKey={musicalKey}
+      measureWidth={measureWidth}
     />
   );
 };

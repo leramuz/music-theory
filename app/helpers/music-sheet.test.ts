@@ -4,7 +4,8 @@ import {
   removeNoteFromMusicSheet,
   updateNoteInMusicSheet,
 } from '@/helpers/music-sheet';
-import { NoteDuration, MeasureConfig } from '@/types/music-sheet';
+import { MeasureConfig } from '@/types/music-sheet';
+import { NoteDuration } from '@/types/note-duration';
 import { Accidental } from '@/types/accidental';
 
 const measures = (): MeasureConfig[] => [

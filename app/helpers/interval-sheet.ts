@@ -1,6 +1,11 @@
-import { adaptSpellingToVexKey, accidentalOfSpelling } from '@/helpers/pitch-spelling';
+import { accidentalOfSpelling } from '@/helpers/pitch-spelling';
+import { accidentalForDisplay } from '@/helpers/key-signature';
 import { getPianoKeyBySpelling } from '@/helpers/piano-key';
-import { Clef, MeasureConfig, NoteDuration } from '@/types/music-sheet';
+import { adaptSpellingToVexflowSpelling } from '@/helpers/vexflow';
+import { MeasureConfig } from '@/types/music-sheet';
+import { Clef } from '@/types/clef';
+import { Key } from '@/types/key';
+import { NoteDuration } from '@/types/note-duration';
 import { PianoKeyId } from '@/types/piano-key';
 import { PitchSpelling } from '@/types/pitch-spelling';
 
@@ -8,16 +13,19 @@ export const makeIntervalMeasure = (
   bottom: PitchSpelling,
   top?: PitchSpelling,
   duration: NoteDuration = NoteDuration.WHOLE,
+  key?: Key | null,
 ): MeasureConfig => {
   const bottomKeyId = getPianoKeyBySpelling(bottom)?.id;
+  const getAcc = (spelling: PitchSpelling) =>
+    key ? accidentalForDisplay(spelling, key) : accidentalOfSpelling(spelling);
 
   const bottomVoice = [
     {
       notes: [
         {
-          keys: [adaptSpellingToVexKey(bottom)],
+          keys: [adaptSpellingToVexflowSpelling(bottom)],
           duration,
-          accidentals: [accidentalOfSpelling(bottom)],
+          accidentals: [getAcc(bottom)],
         },
       ],
     },
@@ -28,9 +36,9 @@ export const makeIntervalMeasure = (
         {
           notes: [
             {
-              keys: [adaptSpellingToVexKey(top)],
+              keys: [adaptSpellingToVexflowSpelling(top)],
               duration,
-              accidentals: [accidentalOfSpelling(top)],
+              accidentals: [getAcc(top)],
             },
           ],
         },

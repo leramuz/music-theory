@@ -1,5 +1,6 @@
 import { Stave } from 'vexflow';
-import { Clef, StaveClickPayload, NoteClickPayload } from '@/types/music-sheet';
+import { Clef } from '@/types/clef';
+import { StaveClickPayload, NoteClickPayload } from '@/types/music-sheet';
 import { CLEF_NOTE_MAPS, CLEF_TOP_LINE_OFFSET } from '@/components/music-sheet/config';
 
 export function attachInteractions(

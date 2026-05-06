@@ -1,12 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Renderer } from 'vexflow';
-import {
-  KeySignature,
-  MeasureConfig,
-  NoteClickPayload,
-  StaveClickPayload,
-  TimeSignature,
-} from '@/types/music-sheet';
+import { TimeSignature } from '@/types/time-signature';
+import { Key } from '@/types/key';
+import { MeasureConfig, NoteClickPayload, StaveClickPayload } from '@/types/music-sheet';
 import { SHEET_DEFAULT_CONFIG } from '@/components/music-sheet/config';
 import { attachInteractions } from '@/components/music-sheet/interactions';
 import { renderSheet } from '@/components/music-sheet/render';
@@ -14,7 +10,7 @@ import { layoutSheet } from '@/components/music-sheet/sheet-layout';
 
 interface MusicSheetProps {
   timeSignature?: TimeSignature;
-  keySignature?: KeySignature;
+  musicalKey?: Key | null;
   measures?: MeasureConfig[];
   measureWidth?: number;
   disableNoteHighlight?: boolean;
@@ -26,7 +22,7 @@ interface MusicSheetProps {
 
 export function MusicSheet({
   timeSignature = SHEET_DEFAULT_CONFIG.timeSignature,
-  keySignature = SHEET_DEFAULT_CONFIG.keySignature,
+  musicalKey = SHEET_DEFAULT_CONFIG.keySignature,
   measures = SHEET_DEFAULT_CONFIG.measures,
   measureWidth = SHEET_DEFAULT_CONFIG.measureWidth,
   onNoteClick,
@@ -48,7 +44,7 @@ export function MusicSheet({
 
     const context = renderer.getContext();
 
-    const { allStaveMeta } = renderSheet(context, layout, measures, timeSignature, keySignature);
+    const { allStaveMeta } = renderSheet(context, layout, measures, timeSignature, musicalKey);
 
     const svgEl = div.querySelector('svg')!;
     if (!svgEl) return;
@@ -66,7 +62,7 @@ export function MusicSheet({
     measures,
     measureWidth,
     timeSignature,
-    keySignature,
+    musicalKey,
     onNoteClick,
     onStaveClick,
     isValidStavePosition,

@@ -1,8 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   accidentalOfSpelling,
-  adaptSpellingToVexKey,
-  adaptVexKeyToSpelling,
   baseSpellings,
   letterAtDiatonicStep,
   naturalNoteOfPitchSpelling,
@@ -102,33 +100,6 @@ describe('stepsBetweenNaturals', () => {
     expect(stepsBetweenNaturals('D', 'G')).toBe(3);
     expect(stepsBetweenNaturals('E', 'F')).toBe(1);
     expect(stepsBetweenNaturals('G', 'D')).toBe(4);
-  });
-});
-
-describe('adaptVexKeyToSpelling', () => {
-  it('converts a VexFlow key and accidental to a pitch spelling', () => {
-    expect(adaptVexKeyToSpelling('c/4', null)).toBe('C4');
-    expect(adaptVexKeyToSpelling('d/5', Accidental.SHARP)).toBe('D#5');
-    expect(adaptVexKeyToSpelling('e/3', Accidental.FLAT)).toBe('Eb3');
-    expect(adaptVexKeyToSpelling('f/4', Accidental.NATURAL)).toBe('Fn4');
-    expect(adaptVexKeyToSpelling('g/2', Accidental.DOUBLE_SHARP)).toBe('G##2');
-    expect(adaptVexKeyToSpelling('a/6', Accidental.DOUBLE_FLAT)).toBe('Abb6');
-  });
-
-  it('throws an error for invalid VexFlow keys', () => {
-    expect(() => adaptVexKeyToSpelling('invalidKey', null)).toThrow();
-    expect(() => adaptVexKeyToSpelling('c/', null)).toThrow();
-  });
-});
-
-describe('adaptSpellingToVexKey', () => {
-  it('converts a pitch spelling to a VexFlow key', () => {
-    expect(adaptSpellingToVexKey('C4')).toBe('c/4');
-    expect(adaptSpellingToVexKey('D#5')).toBe('d/5');
-    expect(adaptSpellingToVexKey('Eb3')).toBe('e/3');
-    expect(adaptSpellingToVexKey('Fn4')).toBe('f/4');
-    expect(adaptSpellingToVexKey('G##2')).toBe('g/2');
-    expect(adaptSpellingToVexKey('Abb6')).toBe('a/6');
   });
 });
 

@@ -38,8 +38,13 @@ export const playInterval = (
       return;
     }
 
-    playPianoKey(bottomKey, bottomAudio);
-    timeoutId = setTimeout(() => playPianoKey(topKey, topAudio), delayMs);
+    const [firstKey, firstAudio, secondKey, secondAudio] =
+      mode === PlaybackMode.MELODIC_DESCENDING
+        ? [topKey, topAudio, bottomKey, bottomAudio]
+        : [bottomKey, bottomAudio, topKey, topAudio];
+
+    playPianoKey(firstKey, firstAudio);
+    timeoutId = setTimeout(() => playPianoKey(secondKey, secondAudio), delayMs);
   });
 
   return () => {

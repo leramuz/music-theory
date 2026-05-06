@@ -1,4 +1,5 @@
-import { MeasureConfig, Clef } from '@/types/music-sheet';
+import { Clef } from '@/types/clef';
+import { MeasureConfig } from '@/types/music-sheet';
 import { SHEET_DEFAULT_CONFIG } from '@/components/music-sheet/config';
 
 export type StaveLayout = {

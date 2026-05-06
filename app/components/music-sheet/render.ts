@@ -10,9 +10,13 @@ import {
   RenderContext,
   Beam,
 } from 'vexflow';
-import { MeasureConfig, TimeSignature, KeySignature, Clef } from '@/types/music-sheet';
+import { MeasureConfig } from '@/types/music-sheet';
+import { Clef } from '@/types/clef';
+import { Key } from '@/types/key';
+import { TimeSignature } from '@/types/time-signature';
 import { type SheetLayout } from '@/components/music-sheet/sheet-layout';
 import { SHEET_DEFAULT_CONFIG } from '@/components/music-sheet/config';
+import { adaptKeyToVexflowKey } from '@/helpers/vexflow';
 
 export type StaveMeta = {
   vfStave: Stave;
@@ -26,7 +30,7 @@ export function renderSheet(
   layout: SheetLayout,
   measures: MeasureConfig[],
   timeSignature: TimeSignature,
-  keySignature: KeySignature,
+  musicalKey: Key | null,
 ) {
   const [beats, beatValue] = timeSignature.split('/').map(Number);
 
@@ -71,9 +75,14 @@ export function renderSheet(
 
       // --- Time + Key ---
       if (measureIndex === 0) {
-        stave.addTimeSignature(timeSignature).addKeySignature(keySignature);
+        stave.addTimeSignature(timeSignature);
+        if (musicalKey) {
+          stave.addKeySignature(adaptKeyToVexflowKey(musicalKey));
+        }
       } else if (isStartOfLine) {
-        stave.addKeySignature(keySignature);
+        if (musicalKey) {
+          stave.addKeySignature(adaptKeyToVexflowKey(musicalKey));
+        }
       }
 
       // --- End bar ---

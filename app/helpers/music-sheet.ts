@@ -1,9 +1,5 @@
-import {
-  MeasureConfig,
-  NoteClickPayload,
-  NoteDuration,
-  StaveClickPayload,
-} from '@/types/music-sheet';
+import { NoteDuration } from '@/types/note-duration';
+import { MeasureConfig, NoteClickPayload, StaveClickPayload } from '@/types/music-sheet';
 import { Accidental } from '@/types/accidental';
 
 const cloneMeasures = (measures: MeasureConfig[]): MeasureConfig[] =>

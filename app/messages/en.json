@@ -96,7 +96,8 @@
         "title": "Playback Mode",
         "description": "Choose whether the intervals are played melodically (one after the other) or harmonically (at the same time). Melodic intervals help you recognize the individual sound of each note, while harmonic intervals train you to hear how the notes blend together!",
         "modes": {
-          "melodic": "Melodic",
+          "melodic-ascending": "Melodic Ascending",
+          "melodic-descending": "Melodic Descending",
           "harmonic": "Harmonic"
         }
       },
@@ -106,9 +107,40 @@
           "none": "None",
           "#": "Sharp (♯)",
           "b": "Flat (♭)",
-          "x": "Double Sharp (𝄪)",
+          "##": "Double Sharp (𝄪)",
           "n": "Natural (♮)",
           "bb": "Double Flat (𝄫)"
+        }
+      },
+      "key": {
+        "title": "Key",
+        "none": "None",
+        "scales": {
+          "major": "Major",
+          "harmonicMinor": "Harmonic Minor"
+        },
+        "rootNote": {
+          "title": "Root Note",
+          "options": {
+            "C": "C",
+            "C#": "C♯",
+            "Db": "D♭",
+            "D": "D",
+            "D#": "D♯",
+            "Eb": "E♭",
+            "E": "E",
+            "F": "F",
+            "F#": "F♯",
+            "Gb": "G♭",
+            "G": "G",
+            "G#": "G♯",
+            "Ab": "A♭",
+            "A": "A",
+            "A#": "A♯",
+            "Bb": "B♭",
+            "B": "B",
+            "Cb": "C♭"
+          }
         }
       }
     },
