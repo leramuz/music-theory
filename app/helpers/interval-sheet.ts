@@ -14,10 +14,13 @@ export const makeIntervalMeasure = (
   top?: PitchSpelling,
   duration: NoteDuration = NoteDuration.WHOLE,
   key?: Key | null,
+  showExplicitTopAccidental = false,
 ): MeasureConfig => {
   const bottomKeyId = getPianoKeyBySpelling(bottom)?.id;
   const getAcc = (spelling: PitchSpelling) =>
     key ? accidentalForDisplay(spelling, key) : accidentalOfSpelling(spelling);
+  const getTopAcc = (spelling: PitchSpelling) =>
+    showExplicitTopAccidental ? accidentalOfSpelling(spelling) : getAcc(spelling);
 
   const bottomVoice = [
     {
@@ -38,7 +41,7 @@ export const makeIntervalMeasure = (
             {
               keys: [adaptSpellingToVexflowSpelling(top)],
               duration,
-              accidentals: [getAcc(top)],
+              accidentals: [getTopAcc(top)],
             },
           ],
         },

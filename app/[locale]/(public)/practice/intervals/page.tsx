@@ -11,7 +11,7 @@ export default function IntervalsPage() {
   return (
     <div className="w-full max-w-3xl mx-auto">
       <Heading title={t('title')} subtitle={t('description')} />
-      <IntervalExercise intervalOptions={Object.values(Interval)} />
+      <IntervalExercise intervalOptions={new Set(Object.values(Interval))} />
     </div>
   );
 }

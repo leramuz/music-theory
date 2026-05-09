@@ -168,10 +168,27 @@
         "description": "Select an accidental if needed, then click the staff to place the note."
       },
       "feedbackPhase": {
-        "correct": "Correct!",
-        "incorrect": "Not quite…",
+        "correct": {
+          "correct": "Correct!",
+          "perfect": "Perfect!",
+          "wellDone": "Well done!",
+          "keepItUp": "Keep it up!"
+        },
+        "partiallyCorrect": "Partially correct!",
+        "incorrect": {
+          "notQuite": "Not quite…",
+          "almost": "Almost!"
+        },
         "youAnswered": "You answered <strong>{answered}</strong> — the correct answer was <strong>{correct}</strong>.",
         "thatsA": "That's a <strong>{interval}</strong>!",
+        "note": "Note",
+        "enharmonicIntervals": "These intervals are enharmonic, meaning they sound the same but have different names and are notated differently.",
+        "redundantNatural": "{note} doesn't need a natural sign — it's natural by default.",
+        "redundantKeyAccidental": "The accidental on {note} is already implied by the key signature.",
+        "notInScale": {
+          "major": "{note} is not part of the {tonic} major scale.",
+          "harmonicMinor": "{note} is not part of the harmonic {tonic} minor scale."
+        },
         "correctAnswerLabel": "Correct Answer",
         "yourAnswerLabel": "Your Answer",
         "playCorrectAriaLabel": "Play correct interval",

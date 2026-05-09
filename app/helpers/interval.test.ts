@@ -11,6 +11,8 @@ import {
   randomIntervalInstanceInKey,
   fittingIntervalsInRange,
   resolveKeyboardIntervalInstance,
+  isMajorMinorConfusion,
+  areEnharmonicIntervals,
 } from '@/helpers/interval';
 import { Interval, IntervalInstance } from '@/types/interval';
 import { PianoKeyId } from '@/types/piano-key';
@@ -331,5 +333,51 @@ describe('randomIntervalInstanceInKey', () => {
     const result = randomIntervalInstanceInKey(onlyPerfectFifth, cMajorScale);
     expect(result).not.toBeNull();
     expect(intervalTypeFromInstance(result!)).toBe(Interval.PERFECT_FIFTH);
+  });
+});
+
+describe('isMajorMinorConfusion', () => {
+  it('returns true for major/minor confusion', () => {
+    expect(isMajorMinorConfusion(Interval.MAJOR_THIRD, Interval.MINOR_THIRD)).toBe(true);
+  });
+
+  it('returns false for identical intervals', () => {
+    expect(isMajorMinorConfusion(Interval.MAJOR_THIRD, Interval.MAJOR_THIRD)).toBe(false);
+  });
+
+  it('returns false for different intervals', () => {
+    expect(isMajorMinorConfusion(Interval.MAJOR_THIRD, Interval.PERFECT_FIFTH)).toBe(false);
+  });
+
+  it('returns false for minor/augmented confusion', () => {
+    expect(isMajorMinorConfusion(Interval.MINOR_SECOND, Interval.AUGMENTED_SECOND)).toBe(false);
+  });
+});
+
+describe('areEnharmonicIntervals', () => {
+  it('returns true for A4 and d5 (both 6 semitones)', () => {
+    expect(areEnharmonicIntervals(Interval.AUGMENTED_FOURTH, Interval.DIMINISHED_FIFTH)).toBe(true);
+  });
+
+  it('returns true for A2 and m3 (both 3 semitones)', () => {
+    expect(areEnharmonicIntervals(Interval.AUGMENTED_SECOND, Interval.MINOR_THIRD)).toBe(true);
+  });
+
+  it('returns true for A5 and m6 (both 8 semitones)', () => {
+    expect(areEnharmonicIntervals(Interval.AUGMENTED_FIFTH, Interval.MINOR_SIXTH)).toBe(true);
+  });
+
+  it('returns false for identical intervals', () => {
+    expect(areEnharmonicIntervals(Interval.AUGMENTED_FOURTH, Interval.AUGMENTED_FOURTH)).toBe(
+      false,
+    );
+  });
+
+  it('returns false for intervals with different semitone counts', () => {
+    expect(areEnharmonicIntervals(Interval.MAJOR_THIRD, Interval.PERFECT_FIFTH)).toBe(false);
+  });
+
+  it('returns false for M2 and m3 (2 vs 3 semitones)', () => {
+    expect(areEnharmonicIntervals(Interval.MAJOR_SECOND, Interval.MINOR_THIRD)).toBe(false);
   });
 });

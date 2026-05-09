@@ -78,3 +78,22 @@ export const intervalsInKey = (
 
   return found;
 };
+
+/**
+ * Returns the pitch class of a spelling (letter + accidental, no octave), normalising an
+ * explicit natural sign to the plain letter so that e.g. 'Fn' and 'F' compare equal.
+ * This preserves the distinction between enharmonic spellings with different letter names
+ * (e.g. 'G#' ≠ 'Ab'), which is the correct musical behaviour for scale membership.
+ */
+const pitchClass = (spelling: PitchSpelling): string => spelling.slice(0, -1).replace('n', '');
+
+/**
+ * Returns true when `spelling` belongs to `scaleSpellings`, compared by pitch class.
+ * Enharmonic respellings with a different letter name (e.g. Ab vs G#) are treated as
+ * distinct — only the diatonic spelling for that scale is accepted.
+ * An explicit natural sign is normalised away, so Fn4 matches F4.
+ */
+export const isSpellingInScale = (
+  spelling: PitchSpelling,
+  scaleSpellings: PitchSpelling[],
+): boolean => scaleSpellings.some((s) => pitchClass(s) === pitchClass(spelling));

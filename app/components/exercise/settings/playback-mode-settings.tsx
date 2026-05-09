@@ -19,7 +19,7 @@ export const PlaybackModeSettings = ({
       <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
         {t('title')}
       </h3>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {Object.values(PlaybackMode).map((m) => (
           <Button
             key={m}

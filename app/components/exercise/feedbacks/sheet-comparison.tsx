@@ -5,6 +5,7 @@ import { makeIntervalMeasure } from '@/helpers/interval-sheet';
 import { Interval, IntervalInstance } from '@/types/interval';
 import { PlaybackMode } from '@/types/playback-mode';
 import { Key } from '@/types/key';
+import { FeedbackStatus } from '@/types/feedback-status';
 import { MusicSheet } from '@/components/music-sheet/music-sheet';
 import { ComparisonCard } from '@/components/exercise/feedbacks/common/comparison-card';
 
@@ -16,6 +17,8 @@ type SheetComparisonProps = {
   playbackMode: PlaybackMode;
   musicalKey: Key | null;
   measureWidth: number;
+  feedbackStatus: FeedbackStatus;
+  answeredHadExplicitAccidental: boolean;
 };
 
 export const SheetComparison = ({
@@ -26,6 +29,8 @@ export const SheetComparison = ({
   playbackMode,
   musicalKey,
   measureWidth,
+  feedbackStatus,
+  answeredHadExplicitAccidental,
 }: SheetComparisonProps) => {
   const correctMeasures = useMemo(
     () => [makeIntervalMeasure(question.bottom, question.top, undefined, musicalKey)],
@@ -40,18 +45,17 @@ export const SheetComparison = ({
               answeredIntervalInstance.top,
               undefined,
               musicalKey,
+              answeredHadExplicitAccidental,
             ),
           ]
         : null,
-    [answeredIntervalInstance, musicalKey],
+    [answeredIntervalInstance, musicalKey, answeredHadExplicitAccidental],
   );
-
-  console.log('measrueWidth in sheet comparison', measureWidth);
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <ComparisonCard
-        isCorrect={true}
+        feedbackStatus={FeedbackStatus.CORRECT}
         labelKey="practice.intervals.feedbackPhase.correctAnswerLabel"
         valueKey={`intervals.${translationKeyForInterval(correctInterval)}`}
         onPlay={() => playInterval(question, playbackMode)}
@@ -67,7 +71,7 @@ export const SheetComparison = ({
 
       {answeredIntervalInstance && answeredMeasures && (
         <ComparisonCard
-          isCorrect={false}
+          feedbackStatus={feedbackStatus}
           labelKey="practice.intervals.feedbackPhase.yourAnswerLabel"
           valueKey={
             answeredInterval

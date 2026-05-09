@@ -2,6 +2,7 @@ import { intervalTopSpelling, translationKeyForInterval } from '@/helpers/interv
 import { playInterval } from '@/helpers/audio';
 import { Interval, IntervalInstance } from '@/types/interval';
 import { PlaybackMode } from '@/types/playback-mode';
+import { FeedbackStatus } from '@/types/feedback-status';
 import { ComparisonCard } from '@/components/exercise/feedbacks/common/comparison-card';
 
 type SelectComparisonProps = {
@@ -9,6 +10,7 @@ type SelectComparisonProps = {
   correctInterval: Interval;
   answeredInterval: Interval;
   playbackMode: PlaybackMode;
+  feedbackStatus: FeedbackStatus;
 };
 
 export const SelectComparison = ({
@@ -16,6 +18,7 @@ export const SelectComparison = ({
   correctInterval,
   answeredInterval,
   playbackMode,
+  feedbackStatus,
 }: SelectComparisonProps) => {
   const answeredTopSpelling = intervalTopSpelling(question.bottom, answeredInterval);
   const answeredIntervalInstance = answeredTopSpelling
@@ -25,7 +28,7 @@ export const SelectComparison = ({
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <ComparisonCard
-        isCorrect={true}
+        feedbackStatus={FeedbackStatus.CORRECT}
         labelKey="practice.intervals.feedbackPhase.correctAnswerLabel"
         valueKey={`intervals.${translationKeyForInterval(correctInterval)}`}
         onPlay={() => playInterval(question, playbackMode)}
@@ -34,7 +37,7 @@ export const SelectComparison = ({
 
       {answeredInterval && answeredIntervalInstance && (
         <ComparisonCard
-          isCorrect={false}
+          feedbackStatus={feedbackStatus}
           labelKey="practice.intervals.feedbackPhase.yourAnswerLabel"
           valueKey={`intervals.${translationKeyForInterval(answeredInterval)}`}
           onPlay={() => playInterval(answeredIntervalInstance, playbackMode)}

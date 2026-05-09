@@ -1,10 +1,16 @@
 import { describe, it, expect } from 'vitest';
-import { scaleSpellingsInRange, intervalsInKey, isRootSpelling } from '@/helpers/scale';
+import {
+  scaleSpellingsInRange,
+  intervalsInKey,
+  isRootSpelling,
+  isSpellingInScale,
+} from '@/helpers/scale';
 import { pianoRangeFromOption } from '@/helpers/range-option';
 import { SCALE_STEP_PATTERN } from '@/data/scales';
 import { Interval } from '@/types/interval';
 import { RangeOption } from '@/types/range-option';
 import { MajorTonic } from '@/types/tonic';
+import { PitchSpelling } from '@/types/pitch-spelling';
 
 describe('scaleSpellingsInRange', () => {
   describe('C major, C4-C5', () => {
@@ -219,5 +225,51 @@ describe('isRootSpelling', () => {
     expect(isRootSpelling('C#4', MajorTonic.C)).toBe(false);
     expect(isRootSpelling('F##3', MajorTonic.F_SHARP)).toBe(false);
     expect(isRootSpelling('Bbb5', MajorTonic.B_FLAT)).toBe(false);
+  });
+});
+
+describe('isSpellingInScale', () => {
+  const cMajorSpellings: PitchSpelling[] = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+  const aHarmonicMinorSpellings: PitchSpelling[] = [
+    'A3',
+    'B3',
+    'C4',
+    'D4',
+    'E4',
+    'F4',
+    'G#4',
+    'A4',
+  ];
+
+  it('returns true for a note in the scale (C4 in C major)', () => {
+    expect(isSpellingInScale('C4', cMajorSpellings)).toBe(true);
+  });
+
+  it('returns true for a note with redundant natural (Fn4 in C major)', () => {
+    expect(isSpellingInScale('Fn4', cMajorSpellings)).toBe(true);
+  });
+
+  it('returns false for a chromatic note not in the scale (F#4 in C major)', () => {
+    expect(isSpellingInScale('F#4', cMajorSpellings)).toBe(false);
+  });
+
+  it('returns false for Bb4 in C major', () => {
+    expect(isSpellingInScale('Bb4', cMajorSpellings)).toBe(false);
+  });
+
+  it('returns true for G#4 in A harmonic minor', () => {
+    expect(isSpellingInScale('G#4', aHarmonicMinorSpellings)).toBe(true);
+  });
+
+  it('returns false for G4 (natural) in A harmonic minor (raised 7th only)', () => {
+    expect(isSpellingInScale('G4', aHarmonicMinorSpellings)).toBe(false);
+  });
+
+  it('returns false for Ab4 in A harmonic minor (wrong enharmonic spelling — should be G#)', () => {
+    expect(isSpellingInScale('Ab4', aHarmonicMinorSpellings)).toBe(false);
+  });
+
+  it('returns false when scaleSpellings is empty', () => {
+    expect(isSpellingInScale('C4', [])).toBe(false);
   });
 });

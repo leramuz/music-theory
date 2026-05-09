@@ -1,10 +1,11 @@
 import { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
+import { FeedbackStatus } from '@/types/feedback-status';
 import { Card } from '@/components/ui/card';
 import { PlayButton } from '@/components/common/play-button';
 
 type ComparisonCardProps = {
-  isCorrect: boolean;
+  feedbackStatus: FeedbackStatus;
   labelKey: string;
   valueKey: string;
   ariaLabel: string;
@@ -13,7 +14,7 @@ type ComparisonCardProps = {
 };
 
 export const ComparisonCard = ({
-  isCorrect,
+  feedbackStatus,
   labelKey,
   valueKey,
   onPlay,
@@ -23,7 +24,9 @@ export const ComparisonCard = ({
   const t = useTranslations();
 
   return (
-    <Card className={`p-4 space-y-3 ${isCorrect ? 'border-green-300' : 'border-red-300'}`}>
+    <Card
+      className={`p-4 space-y-3 ${feedbackStatus === FeedbackStatus.CORRECT ? 'border-green-300' : feedbackStatus === FeedbackStatus.INCORRECT ? 'border-red-300' : 'border-amber-300'}`}
+    >
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">

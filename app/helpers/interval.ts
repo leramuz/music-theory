@@ -217,3 +217,21 @@ export const randomIntervalInstanceInKey = (
 
   return candidates.length > 0 ? randomElement(candidates) : null;
 };
+
+/** Returns true when two intervals share the same number but differ only in
+ *  major/minor quality (e.g. m3 vs M3). */
+export const isMajorMinorConfusion = (a: Interval, b: Interval): boolean => {
+  if (a === b) return false;
+
+  const majorMinor = new Set(['m', 'M']);
+
+  return a.slice(-1) === b.slice(-1) && majorMinor.has(a[0]) && majorMinor.has(b[0]);
+};
+
+/** Returns true when two intervals are enharmonically equivalent —
+ *  same number of semitones but different names (e.g. A4 vs d5). */
+export const areEnharmonicIntervals = (a: Interval, b: Interval): boolean => {
+  if (a === b) return false;
+
+  return chromaticSize(a) === chromaticSize(b);
+};

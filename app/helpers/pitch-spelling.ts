@@ -76,3 +76,19 @@ export const letterAtDiatonicStep = (pitch: PitchSpelling, steps: number): Natur
 
 export const naturalSpelling = (spelling: PitchSpelling): PitchSpelling =>
   `${spelling[0]}${spelling[spelling.length - 1]}` as PitchSpelling;
+
+export const displaySpellingBase = (spelling: PitchSpelling): string => {
+  const ACCIDENTAL_SYMBOLS: Record<Accidental, string> = {
+    b: '♭',
+    '#': '♯',
+    n: '♮',
+    '##': '𝄪',
+    bb: '𝄫',
+  };
+
+  const spellingAccidental = accidentalOfSpelling(spelling);
+  const natural = naturalNoteOfPitchSpelling(spelling);
+
+  if (!spellingAccidental) return natural;
+  return `${natural}${ACCIDENTAL_SYMBOLS[spellingAccidental]}`;
+};

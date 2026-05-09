@@ -168,10 +168,27 @@
         "description": "Wähle bei Bedarf ein Vorzeichen, dann klicke auf das Notensystem."
       },
       "feedbackPhase": {
-        "correct": "Richtig!",
-        "incorrect": "Nicht ganz…",
+        "correct": {
+          "correct": "Richtig!",
+          "perfect": "Perfekt!",
+          "wellDone": "Gut gemacht!",
+          "keepItUp": "Weiter so!"
+        },
+        "partiallyCorrect": "Teils richtig!",
+        "incorrect": {
+          "notQuite": "Nicht ganz…",
+          "almost": "Fast!"
+        },
         "youAnswered": "Du hast <strong>{answered}</strong> geantwortet — die richtige Antwort war <strong>{correct}</strong>.",
         "thatsA": "Das ist <strong>{interval}</strong>!",
+        "note": "Hinweis",
+        "enharmonicIntervals": "Diese Intervalle sind enharmonisch, das heißt, sie klingen gleich, haben aber unterschiedliche Namen, und werden anders notiert.",
+        "redundantNatural": "{note} braucht kein Auflösungszeichen — es ist von Natur aus ein Stammton.",
+        "redundantKeyAccidental": "Das Vorzeichen bei {note} ist bereits durch die Tonart vorgegeben.",
+        "notInScale": {
+          "major": "{note} gehört nicht zur {tonic}-Dur-Tonleiter.",
+          "harmonicMinor": "{note} gehört nicht zur harmonischen {tonic}-Moll-Tonleiter."
+        },
         "correctAnswerLabel": "Richtige Antwort",
         "yourAnswerLabel": "Deine Antwort",
         "playCorrectAriaLabel": "Richtige Antwort abspielen",

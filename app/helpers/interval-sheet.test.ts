@@ -103,6 +103,13 @@ describe('makeIntervalMeasure', () => {
       expect(measure.staves[0].voices[1].notes[0]?.accidentals?.[0]).toBeNull();
     });
 
+    it('shows the explicit accidental on the top note even when key signature implies it', () => {
+      // Bb4 in C minor would normally be suppressed (key sig covers it), but the
+      // user explicitly selected flat → it must appear on the placed note
+      const measure = makeIntervalMeasure('C4', 'Bb4', undefined, cMinor, true);
+      expect(measure.staves[0].voices[1].notes[0]?.accidentals?.[0]).toBe(Accidental.FLAT);
+    });
+
     it('falls back to raw accidentalOfSpelling when no key is provided', () => {
       // Eb4 without key — must show explicit flat
       const measure = makeIntervalMeasure('Eb4');

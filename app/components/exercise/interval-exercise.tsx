@@ -13,6 +13,7 @@ import { playInterval } from '@/helpers/audio';
 import { adaptVexflowSpellingToSpelling } from '@/helpers/vexflow';
 import { makeIntervalMeasure } from '@/helpers/interval-sheet';
 import { pianoRangeFromOption } from '@/helpers/range-option';
+import { getFeedbackNote, getFeedbackStatus, FeedbackNote } from '@/helpers/feedback';
 import { normalizeSpellingsForKeySignature, deviatingAccidentals } from '@/helpers/key-signature';
 import { SCALE_STEP_PATTERN } from '@/data/scales';
 import { Interval, IntervalInstance } from '@/types/interval';
@@ -25,6 +26,7 @@ import { AnswerMode } from '@/types/answer-mode';
 import { RangeOption } from '@/types/range-option';
 import { MeasureConfig, StaveClickPayload } from '@/types/music-sheet';
 import { Key } from '@/types/key';
+import { FeedbackStatus } from '@/types/feedback-status';
 import { KeyHighlightColor } from '@/components/interactive-piano';
 import { SettingsPhase } from '@/components/exercise/phases/settings-phase';
 import { QuestionPhase } from '@/components/exercise/phases/question-phase';
@@ -50,13 +52,13 @@ const INTERVAL_EXERCISE_CONFIG = {
 };
 
 type IntervalExerciseProps = {
-  intervalOptions: Interval[];
+  intervalOptions: Set<Interval>;
 };
 
 export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => {
   const [range, setRange] = useState<RangeOption>(RangeOption.C4_C5);
   const [key, setKey] = useState<Key | null>(null);
-  const [enabledIntervals, setEnabledIntervals] = useState<Set<Interval>>(new Set(intervalOptions));
+  const [enabledIntervals, setEnabledIntervals] = useState<Set<Interval>>(intervalOptions);
   const [answerMode, setAnswerMode] = useState<AnswerMode>(AnswerMode.SELECT);
   const [playbackMode, setPlaybackMode] = useState<PlaybackMode>(PlaybackMode.HARMONIC);
 
@@ -65,10 +67,13 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
 
   const [selectAnswer, setSelectAnswer] = useState<Interval | null>(null);
   const [sheetAnswerTopSpelling, setSheetAnswerTopSpelling] = useState<PitchSpelling | null>(null);
+  const [sheetAnswerExplicitAccidental, setSheetAnswerExplicitAccidental] =
+    useState<boolean>(false);
   const [sheetAccidental, setSheetAccidental] = useState<Accidental | null>(null);
   const [answerTopKeyId, setAnswerTopKeyId] = useState<PianoKeyId | null>(null);
 
-  const [isCorrect, setIsCorrect] = useState(false);
+  const [feedbackStatus, setFeedbackStatus] = useState<FeedbackStatus>(FeedbackStatus.INCORRECT);
+  const [feedbackNote, setFeedbackNote] = useState<FeedbackNote | null>(null);
 
   const scaleSpellings = useMemo<PitchSpelling[]>(() => {
     if (!key) return [];
@@ -86,11 +91,12 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
 
   const effectiveIntervalOptions = useMemo<Interval[]>(() => {
     if (!key || scaleSpellings.length === 0)
-      return intervalOptions.filter((i) =>
+      return Array.from(intervalOptions).filter((i) =>
         INTERVAL_EXERCISE_CONFIG.intervalOptionsNoKey.includes(i),
       );
-    const inKey = intervalsInKey(scaleSpellings, intervalOptions);
-    return intervalOptions.filter((i) => inKey.has(i));
+
+    const inKey = intervalsInKey(scaleSpellings, Array.from(intervalOptions));
+    return Array.from(intervalOptions).filter((i) => inKey.has(i));
   }, [key, scaleSpellings, intervalOptions]);
 
   const effectiveAccidentalOptions = useMemo<Accidental[]>(() => {
@@ -154,9 +160,15 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
   const sheetMeasures = useMemo((): MeasureConfig[] => {
     if (!question) return [];
     return [
-      makeIntervalMeasure(question.bottom, sheetAnswerTopSpelling ?? undefined, undefined, key),
+      makeIntervalMeasure(
+        question.bottom,
+        sheetAnswerTopSpelling ?? undefined,
+        undefined,
+        key,
+        sheetAnswerExplicitAccidental,
+      ),
     ];
-  }, [question, sheetAnswerTopSpelling, key]);
+  }, [question, sheetAnswerTopSpelling, key, sheetAnswerExplicitAccidental]);
 
   const canSubmit =
     (answerMode === AnswerMode.SELECT && selectAnswer !== null) ||
@@ -172,7 +184,15 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
           SCALE_STEP_PATTERN[key.scale],
           pianoRangeFromOption(newRange),
         );
-        setEnabledIntervals(intervalsInKey(spellings, intervalOptions));
+        setEnabledIntervals(intervalsInKey(spellings, Array.from(intervalOptions)));
+      } else {
+        setEnabledIntervals(
+          new Set(
+            Array.from(intervalOptions).filter((i) =>
+              INTERVAL_EXERCISE_CONFIG.intervalOptionsNoKey.includes(i),
+            ),
+          ),
+        );
       }
     },
     [key, intervalOptions],
@@ -187,9 +207,15 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
           SCALE_STEP_PATTERN[newKey.scale],
           pianoRangeFromOption(range),
         );
-        setEnabledIntervals(intervalsInKey(spellings, intervalOptions));
+        setEnabledIntervals(intervalsInKey(spellings, Array.from(intervalOptions)));
       } else {
-        setEnabledIntervals(new Set(intervalOptions));
+        setEnabledIntervals(
+          new Set(
+            Array.from(intervalOptions).filter((i) =>
+              INTERVAL_EXERCISE_CONFIG.intervalOptionsNoKey.includes(i),
+            ),
+          ),
+        );
       }
     },
     [intervalOptions, range],
@@ -199,6 +225,7 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
     setSelectAnswer(null);
     setAnswerTopKeyId(null);
     setSheetAnswerTopSpelling(null);
+    setSheetAnswerExplicitAccidental(false);
     setSheetAccidental(null);
   }, []);
 
@@ -216,6 +243,7 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
       key && normalizedScaleSpellings.length > 0
         ? randomIntervalInstanceInKey(enabledIntervals, normalizedScaleSpellings)
         : randomIntervalInstanceInRange(enabledIntervals, pianoRangeFromOption(range));
+
     if (q) startQuestion(q);
   }, [enabledIntervals, range, key, normalizedScaleSpellings, startQuestion]);
 
@@ -223,20 +251,25 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
     if (question) playInterval(question, playbackMode);
   }, [question, playbackMode]);
 
-  const submitAnswer = useCallback(() => {
+  const submitAnswer = () => {
     if (!question) return;
 
-    if (answerMode === AnswerMode.SELECT && selectAnswer) {
-      const correct = intervalTypeFromInstance(question);
-      setIsCorrect(selectAnswer === correct);
-    } else if (answerMode === AnswerMode.KEYBOARD && answerTopKeyId) {
-      setIsCorrect(answerTopKeyId === getPianoKeyBySpelling(question.top).id);
-    } else if (answerMode === AnswerMode.SHEET && sheetAnswerTopSpelling) {
-      setIsCorrect(sheetAnswerTopSpelling === question.top);
-    }
+    const correctInterval = intervalTypeFromInstance(question);
+    setFeedbackStatus(getFeedbackStatus(correctInterval, answeredInterval));
+    setFeedbackNote(
+      getFeedbackNote(
+        correctInterval,
+        answeredInterval,
+        sheetAnswerTopSpelling,
+        key,
+        normalizedScaleSpellings,
+        answerIntervalInstance?.top,
+        sheetAnswerExplicitAccidental,
+      ),
+    );
 
     setPhase(ExercisePhase.FEEDBACK);
-  }, [question, answerMode, selectAnswer, answerTopKeyId, sheetAnswerTopSpelling]);
+  };
 
   const toggleInterval = useCallback((interval: Interval) => {
     setEnabledIntervals((prev) => {
@@ -256,6 +289,7 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
         const spelling = adaptVexflowSpellingToSpelling(payload.noteKey, sheetAccidental, key);
         getPianoKeyBySpelling(spelling);
         setSheetAnswerTopSpelling(spelling);
+        setSheetAnswerExplicitAccidental(sheetAccidental !== null);
       } catch {
         // invalid spelling, ignore
       }
@@ -319,10 +353,12 @@ export const IntervalExercise = ({ intervalOptions }: IntervalExerciseProps) => 
         answeredIntervalInstance={answerIntervalInstance}
         correctInterval={intervalTypeFromInstance(question)}
         answeredInterval={answeredInterval}
-        isCorrect={isCorrect}
+        feedbackStatus={feedbackStatus}
+        feedbackNote={feedbackNote}
         playbackMode={playbackMode}
         range={range}
         measureWidth={INTERVAL_EXERCISE_CONFIG.measureWidth}
+        answeredHadExplicitAccidental={sheetAnswerExplicitAccidental}
         onNext={startExercise}
         onBackToSettings={() => setPhase(ExercisePhase.SETTINGS)}
       />

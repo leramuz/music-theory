@@ -2,28 +2,36 @@ import { useTranslations } from 'next-intl';
 import { Check, ChevronRight, Settings2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { translationKeyForInterval } from '@/helpers/interval';
+import {
+  incorrectTitleTranslationKey,
+  randomCorrectTranslationKey,
+  FeedbackNote,
+} from '@/helpers/feedback';
 import { Interval, IntervalInstance } from '@/types/interval';
+import { FeedbackStatus } from '@/types/feedback-status';
 import { PlaybackMode } from '@/types/playback-mode';
 import { AnswerMode } from '@/types/answer-mode';
 import { RangeOption } from '@/types/range-option';
+import { Key } from '@/types/key';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { SelectComparison } from '@/components/exercise/feedbacks/select-comparison';
 import { SheetComparison } from '@/components/exercise/feedbacks/sheet-comparison';
 import { KeyboardComparison } from '@/components/exercise/feedbacks/keyboard-comparison';
-import { Key } from '@/types/key';
 
 type FeedbackPhaseProps = {
   answerMode: AnswerMode;
   question: IntervalInstance;
   musicalKey: Key | null;
-  isCorrect: boolean;
+  feedbackStatus: FeedbackStatus;
+  feedbackNote: FeedbackNote | null;
   correctInterval: Interval;
   answeredInterval: Interval | null;
   answeredIntervalInstance: IntervalInstance | null;
   playbackMode: PlaybackMode;
   range: RangeOption;
   measureWidth: number;
+  answeredHadExplicitAccidental: boolean;
   onNext: () => void;
   onBackToSettings: () => void;
 };
@@ -31,7 +39,8 @@ type FeedbackPhaseProps = {
 export const FeedbackPhase = ({
   question,
   musicalKey,
-  isCorrect,
+  feedbackStatus,
+  feedbackNote,
   correctInterval,
   answeredInterval,
   answeredIntervalInstance,
@@ -39,6 +48,7 @@ export const FeedbackPhase = ({
   answerMode,
   range,
   measureWidth,
+  answeredHadExplicitAccidental,
   onNext,
   onBackToSettings,
 }: FeedbackPhaseProps) => {
@@ -49,18 +59,26 @@ export const FeedbackPhase = ({
       <Card
         className={cn(
           'p-5 flex items-center gap-4',
-          isCorrect
+          feedbackStatus === FeedbackStatus.CORRECT
             ? 'border-green-500 bg-green-50 dark:bg-green-950/30'
-            : 'border-red-400 bg-red-50 dark:bg-red-950/30',
+            : feedbackStatus === FeedbackStatus.PARTIALLY_CORRECT
+              ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/30'
+              : 'border-red-400 bg-red-50 dark:bg-red-950/30',
         )}
       >
         <div
           className={cn(
             'flex size-10 shrink-0 items-center justify-center rounded-full',
-            isCorrect ? 'bg-green-500' : 'bg-red-500',
+            feedbackStatus === FeedbackStatus.CORRECT
+              ? 'bg-green-500'
+              : feedbackStatus === FeedbackStatus.PARTIALLY_CORRECT
+                ? 'bg-amber-500'
+                : 'bg-red-500',
           )}
         >
-          {isCorrect ? (
+          {feedbackStatus === FeedbackStatus.CORRECT ? (
+            <Check className="size-5 text-white" />
+          ) : feedbackStatus === FeedbackStatus.PARTIALLY_CORRECT ? (
             <Check className="size-5 text-white" />
           ) : (
             <X className="size-5 text-white" />
@@ -70,14 +88,20 @@ export const FeedbackPhase = ({
           <p
             className={cn(
               'text-lg font-bold',
-              isCorrect ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400',
+              feedbackStatus === FeedbackStatus.CORRECT
+                ? 'text-green-700 dark:text-green-400'
+                : feedbackStatus === FeedbackStatus.PARTIALLY_CORRECT
+                  ? 'text-amber-700 dark:text-amber-400'
+                  : 'text-red-700 dark:text-red-400',
             )}
           >
-            {isCorrect
-              ? t('practice.intervals.feedbackPhase.correct')
-              : t('practice.intervals.feedbackPhase.incorrect')}
+            {feedbackStatus === FeedbackStatus.CORRECT
+              ? t(randomCorrectTranslationKey())
+              : feedbackStatus === FeedbackStatus.PARTIALLY_CORRECT
+                ? t('practice.intervals.feedbackPhase.partiallyCorrect')
+                : t(incorrectTitleTranslationKey(correctInterval, answeredInterval))}
           </p>
-          {isCorrect && (
+          {feedbackStatus === FeedbackStatus.CORRECT && (
             <p className="text-sm text-muted-foreground mt-0.5">
               {t.rich('practice.intervals.feedbackPhase.thatsA', {
                 interval: t(`intervals.${translationKeyForInterval(correctInterval)}`),
@@ -85,7 +109,7 @@ export const FeedbackPhase = ({
               })}
             </p>
           )}
-          {!isCorrect && (
+          {feedbackStatus !== FeedbackStatus.CORRECT && (
             <>
               <p className="text-sm text-muted-foreground mt-0.5">
                 {t.rich('practice.intervals.feedbackPhase.youAnswered', {
@@ -98,10 +122,24 @@ export const FeedbackPhase = ({
               </p>
             </>
           )}
+
+          {feedbackNote && (
+            <div className="mt-2 italic text-muted-foreground">
+              <span className="text-sm mt-0.5 font-semibold">
+                {t(`practice.intervals.feedbackPhase.note`)}
+              </span>
+              {': '}
+              <span className="text-sm mt-0.5">
+                {feedbackNote.params
+                  ? t(feedbackNote.translationKey, feedbackNote.params)
+                  : t(feedbackNote.translationKey)}
+              </span>
+            </div>
+          )}
         </div>
       </Card>
 
-      {!isCorrect && (
+      {feedbackStatus !== FeedbackStatus.CORRECT && (
         <ComparisonSection
           answerMode={answerMode}
           question={question}
@@ -112,6 +150,8 @@ export const FeedbackPhase = ({
           playbackMode={playbackMode}
           range={range}
           measureWidth={measureWidth}
+          feedbackStatus={feedbackStatus}
+          answeredHadExplicitAccidental={answeredHadExplicitAccidental}
         />
       )}
 
@@ -139,6 +179,8 @@ type ComparisonSectionProps = {
   playbackMode: PlaybackMode;
   range: RangeOption;
   musicalKey: Key | null;
+  feedbackStatus: FeedbackStatus;
+  answeredHadExplicitAccidental: boolean;
 };
 
 const ComparisonSection = ({
@@ -151,6 +193,8 @@ const ComparisonSection = ({
   range,
   musicalKey,
   measureWidth,
+  feedbackStatus,
+  answeredHadExplicitAccidental,
 }: ComparisonSectionProps) => {
   if (answerMode === AnswerMode.SELECT)
     return answeredInterval ? (
@@ -159,6 +203,7 @@ const ComparisonSection = ({
         correctInterval={correctInterval}
         answeredInterval={answeredInterval}
         playbackMode={playbackMode}
+        feedbackStatus={feedbackStatus}
       />
     ) : null;
 
@@ -171,6 +216,7 @@ const ComparisonSection = ({
         answeredIntervalInstance={answeredIntervalInstance}
         playbackMode={playbackMode}
         range={range}
+        feedbackStatus={feedbackStatus}
       />
     );
   }
@@ -184,6 +230,8 @@ const ComparisonSection = ({
       playbackMode={playbackMode}
       musicalKey={musicalKey}
       measureWidth={measureWidth}
+      feedbackStatus={feedbackStatus}
+      answeredHadExplicitAccidental={answeredHadExplicitAccidental}
     />
   );
 };

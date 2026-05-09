@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   accidentalOfSpelling,
   baseSpellings,
+  displaySpellingBase,
   letterAtDiatonicStep,
   naturalNoteOfPitchSpelling,
   naturalSpelling,
@@ -122,5 +123,31 @@ describe('naturalSpelling', () => {
     expect(naturalSpelling('Fn4')).toBe('F4');
     expect(naturalSpelling('G##2')).toBe('G2');
     expect(naturalSpelling('Abb6')).toBe('A6');
+  });
+});
+
+describe('displaySpellingBase', () => {
+  it('returns the natural note for a natural spelling', () => {
+    expect(displaySpellingBase('C4')).toBe('C');
+  });
+
+  it('returns the natural note with accidental symbol for a sharp spelling', () => {
+    expect(displaySpellingBase('D#5')).toBe('D♯');
+  });
+
+  it('returns the natural note with accidental symbol for a flat spelling', () => {
+    expect(displaySpellingBase('Eb3')).toBe('E♭');
+  });
+
+  it('returns the natural note with natural symbol for a natural sign spelling', () => {
+    expect(displaySpellingBase('Fn4')).toBe('F♮');
+  });
+
+  it('returns the natural note with double-sharp symbol for a double-sharp spelling', () => {
+    expect(displaySpellingBase('G##2')).toBe('G𝄪');
+  });
+
+  it('returns the natural note with double-flat symbol for a double-flat spelling', () => {
+    expect(displaySpellingBase('Abb6')).toBe('A𝄫');
   });
 });
