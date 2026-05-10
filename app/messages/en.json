@@ -9,7 +9,8 @@
     "home": "Home",
     "theory": "Theory",
     "practice": "Practice",
-    "intervals": "Interval Training"
+    "intervals": "Interval Training",
+    "chords": "Chord Training"
   },
   "footer": {
     "copyright": "© 2026 Music Theory App. All rights reserved."
@@ -25,6 +26,40 @@
     "description": "An unexpected error occurred. Please try again.",
     "retry": "Try again",
     "goHome": "Go to home"
+  },
+  "chords": {
+    "majorTriad": {
+      "root": "Major Triad",
+      "first": "Major Triad (1st Inv.)",
+      "second": "Major Triad (2nd Inv.)"
+    },
+    "minorTriad": {
+      "root": "Minor Triad",
+      "first": "Minor Triad (1st Inv.)",
+      "second": "Minor Triad (2nd Inv.)"
+    },
+    "diminishedTriad": {
+      "root": "Diminished Triad",
+      "first": "Diminished Triad (1st Inv.)",
+      "second": "Diminished Triad (2nd Inv.)"
+    },
+    "augmentedTriad": {
+      "root": "Augmented Triad",
+      "first": "Augmented Triad (1st Inv.)",
+      "second": "Augmented Triad (2nd Inv.)"
+    },
+    "dominant7": {
+      "root": "Dominant 7th",
+      "first": "Dominant 7th (1st Inv.)",
+      "second": "Dominant 7th (2nd Inv.)",
+      "third": "Dominant 7th (3rd Inv.)"
+    },
+    "diminished7": {
+      "root": "Diminished 7th",
+      "first": "Diminished 7th (1st Inv.)",
+      "second": "Diminished 7th (2nd Inv.)",
+      "third": "Diminished 7th (3rd Inv.)"
+    }
   },
   "intervals": {
     "perfectUnison": "Perfect Unison",
@@ -196,6 +231,61 @@
         "settings": "Settings",
         "nextQuestion": "Next Question",
         "unknownInterval": "Unknown Interval"
+      }
+    },
+    "chords": {
+      "title": "Chord Ear Training",
+      "description": "Train your ear to recognise chords — triads, seventh chords, and their inversions. Get a feel for each chord and improve your recognition skills. Get instant feedback to track your progress and master chord recognition!",
+      "question": {
+        "title": "What chord do you hear?",
+        "description": "Listen carefully, then submit your answer below.",
+        "play": "Play",
+        "settings": "Settings",
+        "submitAnswer": "Submit Answer"
+      },
+      "selectAnswer": {
+        "title": "Select the chord"
+      },
+      "keyboardAnswer": {
+        "title": "Click the remaining notes",
+        "description": "The <blue>blue</blue> key is the bass note. Click the remaining notes to complete the chord.",
+        "bassNote": "Bass note (given)",
+        "yourAnswer": "Your selection",
+        "selectMore": "Select {count} more {count, plural, one {note} other {notes}}"
+      },
+      "sheetAnswer": {
+        "title": "Place the remaining notes on the staff",
+        "description": "Select an accidental if needed, then click the staff to place each note."
+      },
+      "settings": {
+        "chords": {
+          "title": "Chords to Train",
+          "groups": {
+            "triads": "Triads",
+            "seventhChords": "Seventh Chords"
+          }
+        }
+      },
+      "feedbackPhase": {
+        "correct": {
+          "correct": "Correct!",
+          "perfect": "Perfect!",
+          "wellDone": "Well done!",
+          "keepItUp": "Keep it up!"
+        },
+        "incorrect": {
+          "notQuite": "Not quite…",
+          "almost": "Almost!"
+        },
+        "youAnswered": "You answered <strong>{answered}</strong> — the correct answer was <strong>{correct}</strong>.",
+        "thatsA": "That's a <strong>{chord}</strong>!",
+        "correctAnswerLabel": "Correct Answer",
+        "yourAnswerLabel": "Your Answer",
+        "playCorrectAriaLabel": "Play correct chord",
+        "playAnswerAriaLabel": "Play your answer",
+        "settings": "Settings",
+        "nextQuestion": "Next Question",
+        "unknownChord": "Unknown Chord"
       }
     }
   }

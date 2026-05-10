@@ -1,4 +1,5 @@
 import { getPianoKeyBySpelling } from '@/helpers/piano-key';
+import { ChordInstance } from '@/types/chord';
 import { IntervalInstance } from '@/types/interval';
 import { PianoKey } from '@/types/piano-key';
 import { PlaybackMode } from '@/types/playback-mode';
@@ -50,5 +51,43 @@ export const playInterval = (
   return () => {
     cancelled = true;
     clearTimeout(timeoutId);
+  };
+};
+
+export const playChord = (
+  chord: ChordInstance,
+  mode: PlaybackMode = PlaybackMode.HARMONIC,
+  delayMs = 1000,
+): (() => void) => {
+  const keys = chord.notes.map(getPianoKeyBySpelling);
+
+  const timeoutIds: ReturnType<typeof setTimeout>[] = [];
+  let cancelled = false;
+
+  Promise.all(keys.map(loadAudio)).then((audios) => {
+    if (cancelled) return;
+
+    if (mode === PlaybackMode.HARMONIC) {
+      keys.forEach((key, i) => playPianoKey(key, audios[i]));
+      return;
+    }
+
+    const ordered =
+      mode === PlaybackMode.MELODIC_DESCENDING
+        ? keys.map((k, i) => ({ key: k, audio: audios[i] })).reverse()
+        : keys.map((k, i) => ({ key: k, audio: audios[i] }));
+
+    ordered.forEach(({ key, audio }, i) => {
+      if (i === 0) {
+        playPianoKey(key, audio);
+      } else {
+        timeoutIds.push(setTimeout(() => playPianoKey(key, audio), delayMs * i));
+      }
+    });
+  });
+
+  return () => {
+    cancelled = true;
+    timeoutIds.forEach(clearTimeout);
   };
 };

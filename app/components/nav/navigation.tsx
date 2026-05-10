@@ -13,7 +13,10 @@ const navItems: NavItem[] = [
   {
     href: '/practice',
     label: 'nav.practice',
-    children: [{ href: '/practice/intervals', label: 'nav.intervals' }],
+    children: [
+      { href: '/practice/intervals', label: 'nav.intervals' },
+      { href: '/practice/chords', label: 'nav.chords' },
+    ],
   },
 ];
 

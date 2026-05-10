@@ -9,7 +9,8 @@
     "home": "Home",
     "theory": "Theorie",
     "practice": "Praxis",
-    "intervals": "Intervalltraining"
+    "intervals": "Intervalltraining",
+    "chords": "Akkordtraining"
   },
   "footer": {
     "copyright": "© 2026 Musiktheorie-App. Alle Rechte vorbehalten."
@@ -25,6 +26,40 @@
     "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
     "retry": "Erneut versuchen",
     "goHome": "Zur Startseite"
+  },
+  "chords": {
+    "majorTriad": {
+      "root": "Dur-Dreiklang",
+      "first": "Dur-Dreiklang (1. Umkehrung)",
+      "second": "Dur-Dreiklang (2. Umkehrung)"
+    },
+    "minorTriad": {
+      "root": "Moll-Dreiklang",
+      "first": "Moll-Dreiklang (1. Umkehrung)",
+      "second": "Moll-Dreiklang (2. Umkehrung)"
+    },
+    "diminishedTriad": {
+      "root": "Verminderter Dreiklang",
+      "first": "Verminderter Dreiklang (1. Umkehrung)",
+      "second": "Verminderter Dreiklang (2. Umkehrung)"
+    },
+    "augmentedTriad": {
+      "root": "Übermäßiger Dreiklang",
+      "first": "Übermäßiger Dreiklang (1. Umkehrung)",
+      "second": "Übermäßiger Dreiklang (2. Umkehrung)"
+    },
+    "dominant7": {
+      "root": "Dominantseptakkord",
+      "first": "Dominantseptakkord (1. Umkehrung)",
+      "second": "Dominantseptakkord (2. Umkehrung)",
+      "third": "Dominantseptakkord (3. Umkehrung)"
+    },
+    "diminished7": {
+      "root": "Verminderter Septakkord",
+      "first": "Verminderter Septakkord (1. Umkehrung)",
+      "second": "Verminderter Septakkord (2. Umkehrung)",
+      "third": "Verminderter Septakkord (3. Umkehrung)"
+    }
   },
   "intervals": {
     "perfectUnison": "Reine Prime",
@@ -196,6 +231,61 @@
         "settings": "Einstellungen",
         "nextQuestion": "Nächste Frage",
         "unknownInterval": "Unbekanntes Intervall"
+      }
+    },
+    "chords": {
+      "title": "Akkordtraining",
+      "description": "Trainiere dein Gehör für Akkorde — Dreiklänge, Septakkorde und ihre Umkehrungen. Erhalte ein Gefühl für jeden Akkord und verbessere deine Erkennungsfähigkeiten. Erhalte sofortiges Feedback, um deinen Fortschritt zu verfolgen und die Akkorderkennung zu meistern!",
+      "question": {
+        "title": "Welchen Akkord hörst du?",
+        "description": "Hör genau hin, dann gib unten deine Antwort ein.",
+        "play": "Abspielen",
+        "settings": "Einstellungen",
+        "submitAnswer": "Antwort abgeben"
+      },
+      "selectAnswer": {
+        "title": "Akkord auswählen"
+      },
+      "keyboardAnswer": {
+        "title": "Restliche Töne klicken",
+        "description": "Die <blue>blaue</blue> Taste ist der Basston. Klicke auf die restlichen Töne, um den Akkord zu vervollständigen.",
+        "bassNote": "Basston (vorgegeben)",
+        "yourAnswer": "Deine Auswahl",
+        "selectMore": "Wähle {count} weitere {count, plural, one {Ton} other {Töne}}"
+      },
+      "sheetAnswer": {
+        "title": "Restliche Töne im Notensystem platzieren",
+        "description": "Wähle bei Bedarf ein Vorzeichen, dann klicke auf das Notensystem."
+      },
+      "settings": {
+        "chords": {
+          "title": "Zu trainierende Akkorde",
+          "groups": {
+            "triads": "Dreiklänge",
+            "seventhChords": "Septakkorde"
+          }
+        }
+      },
+      "feedbackPhase": {
+        "correct": {
+          "correct": "Richtig!",
+          "perfect": "Perfekt!",
+          "wellDone": "Gut gemacht!",
+          "keepItUp": "Weiter so!"
+        },
+        "incorrect": {
+          "notQuite": "Nicht ganz…",
+          "almost": "Fast!"
+        },
+        "youAnswered": "Du hast <strong>{answered}</strong> geantwortet — die richtige Antwort war <strong>{correct}</strong>.",
+        "thatsA": "Das ist <strong>{chord}</strong>!",
+        "correctAnswerLabel": "Richtige Antwort",
+        "yourAnswerLabel": "Deine Antwort",
+        "playCorrectAriaLabel": "Richtige Antwort abspielen",
+        "playAnswerAriaLabel": "Deine Antwort abspielen",
+        "settings": "Einstellungen",
+        "nextQuestion": "Nächste Frage",
+        "unknownChord": "Unbekannter Akkord"
       }
     }
   }
