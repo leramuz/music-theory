@@ -1,8 +1,15 @@
-import { Clef, KeySignature, TimeSignature } from '@/types/music-sheet';
+import { Clef } from '@/types/clef';
+import { Key } from '@/types/key';
+import { MajorTonic } from '@/types/tonic';
+import { Scale } from '@/types/scale';
+import { TimeSignature } from '@/types/time-signature';
 
 export const SHEET_DEFAULT_CONFIG = {
   timeSignature: TimeSignature.FOUR_FOUR,
-  keySignature: KeySignature.C,
+  keySignature: {
+    scale: Scale.MAJOR,
+    tonic: MajorTonic.C,
+  } as Key,
   measureWidth: 300,
   measuresPerLine: 4,
   staveGapY: 120,

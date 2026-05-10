@@ -1,12 +1,21 @@
 'use client';
 
 import { useEffect, useMemo, useRef } from 'react';
-import { PianoKey, PianoKeyId } from '@/types/piano-key';
 import { getPianoKeysInRange, isWhiteKey } from '@/helpers/piano-key';
 import { playPianoKey } from '@/helpers/audio';
+import { PianoKey, PianoKeyId } from '@/types/piano-key';
 import { Card } from '@/components/ui/card';
 
 type PianoZoom = 0.5 | 1;
+
+export type KeyHighlightColor = 'blue' | 'amber' | 'green' | 'red';
+
+const KEY_HIGHLIGHT: Record<KeyHighlightColor, string> = {
+  blue: 'bg-blue-200 hover:bg-blue-100 active:bg-blue-300 border-blue-400',
+  amber: 'bg-amber-200 hover:bg-amber-100 active:bg-amber-300 border-amber-400',
+  green: 'bg-green-200 hover:bg-green-100 active:bg-green-300 border-green-500',
+  red: 'bg-red-200 hover:bg-red-100 active:bg-red-300 border-red-400',
+};
 
 const DEFAULT_PIANO_RANGE = {
   from: PianoKeyId.A0,
@@ -23,6 +32,9 @@ const getWhiteKeyWidth = (zoom: PianoZoom) => WHITE_KEY_WIDTH_PX * zoom;
 const getBlackKeyHeight = (zoom: PianoZoom) => BLACK_KEY_HEIGHT_PX * zoom;
 const getBlackKeyWidth = (zoom: PianoZoom) => BLACK_KEY_WIDTH_PX * zoom;
 
+const buildHighlightMap = (keys?: { id: PianoKeyId; color: KeyHighlightColor }[]) =>
+  new Map(keys?.map((h) => [h.id, h.color]));
+
 interface InteractivePianoProps {
   onKeyPlay?: (_key: PianoKeyId) => void;
   showKeyLabels?: boolean;
@@ -33,6 +45,10 @@ interface InteractivePianoProps {
   };
   rightPedalOn?: boolean;
   zoom?: PianoZoom;
+  highlightedKeys?: { id: PianoKeyId; color: KeyHighlightColor }[];
+  muted?: boolean;
+  scrollToKeyId?: PianoKeyId;
+  disabledKeys?: Set<PianoKeyId>;
 }
 
 export function InteractivePiano({
@@ -42,9 +58,14 @@ export function InteractivePiano({
   range = DEFAULT_PIANO_RANGE,
   rightPedalOn = false,
   zoom = 0.5,
+  highlightedKeys,
+  muted = false,
+  scrollToKeyId,
+  disabledKeys,
 }: InteractivePianoProps) {
   const activeAudioRef = useRef<HTMLAudioElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const highlightMap = useMemo(() => buildHighlightMap(highlightedKeys), [highlightedKeys]);
 
   const allPianoKeys = useMemo(() => {
     return getPianoKeysInRange(DEFAULT_PIANO_RANGE);
@@ -82,14 +103,17 @@ export function InteractivePiano({
 
   const playKey = (key: PianoKey) => {
     if (showKeysOutOfRange && !pianoKeysInRange.some((k) => k.id === key.id)) return;
+    if (disabledKeys?.has(key.id)) return;
 
-    if (!rightPedalOn && activeAudioRef.current) {
-      activeAudioRef.current.pause();
-      activeAudioRef.current.currentTime = 0;
+    if (!muted) {
+      if (!rightPedalOn && activeAudioRef.current) {
+        activeAudioRef.current.pause();
+        activeAudioRef.current.currentTime = 0;
+      }
+
+      const audio = playPianoKey(key);
+      activeAudioRef.current = audio;
     }
-
-    const audio = playPianoKey(key);
-    activeAudioRef.current = audio;
 
     onKeyPlay?.(key.id);
   };
@@ -98,8 +122,15 @@ export function InteractivePiano({
     const element = scrollRef.current;
     if (!element) return;
 
-    const maxScrollLeft = element.scrollWidth - element.clientWidth;
-    element.scrollLeft = maxScrollLeft / 2;
+    if (scrollToKeyId !== undefined) {
+      const whiteIndex = whiteIndexByKeyId.get(scrollToKeyId) ?? 0;
+      const isBlack = !isWhiteKey(scrollToKeyId);
+      const keyLeft = (whiteIndex + (isBlack ? 1 : 0)) * getWhiteKeyWidth(zoom);
+      element.scrollLeft = Math.max(0, keyLeft - getWhiteKeyWidth(zoom) * 2);
+    } else {
+      const maxScrollLeft = element.scrollWidth - element.clientWidth;
+      element.scrollLeft = maxScrollLeft / 2;
+    }
   }, []);
 
   useEffect(() => {
@@ -115,6 +146,7 @@ export function InteractivePiano({
           <div className="flex items-center">
             {whiteKeys.map((key) => {
               const isOutOfRange = showKeysOutOfRange && !keysInRangeSet.has(key.id);
+              const isDisabled = disabledKeys?.has(key.id) ?? false;
 
               return (
                 <button
@@ -122,11 +154,16 @@ export function InteractivePiano({
                   type="button"
                   aria-label={`Play ${key.spellings[0]}`}
                   onClick={() => playKey(key)}
-                  disabled={isOutOfRange}
-                  className={`flex flex-col justify-end rounded-b-sm border border-black px-1 pb-2 text-center text-[10px] font-medium transition ${
-                    isOutOfRange
+                  disabled={isOutOfRange || isDisabled}
+                  className={`flex flex-col justify-end rounded-b-sm border px-1 pb-2 text-center text-[10px] font-medium transition ${
+                    isOutOfRange || isDisabled
                       ? 'border-zinc-300 cursor-default'
-                      : 'bg-white hover:bg-zinc-100 active:bg-zinc-200'
+                      : (() => {
+                          const hlColor = highlightMap.get(key.id);
+                          return hlColor
+                            ? KEY_HIGHLIGHT[hlColor]
+                            : 'border-black bg-white hover:bg-zinc-100 active:bg-zinc-200';
+                        })()
                   }`}
                   style={{
                     width: `${getWhiteKeyWidth(zoom)}px`,
@@ -145,6 +182,7 @@ export function InteractivePiano({
 
           {blackKeys.map((key) => {
             const isOutOfRange = showKeysOutOfRange && !keysInRangeSet.has(key.id);
+            const isDisabled = disabledKeys?.has(key.id) ?? false;
             const left = getWhiteIndex(key) * getWhiteKeyWidth(zoom) + getWhiteKeyWidth(zoom);
 
             return (
@@ -153,11 +191,16 @@ export function InteractivePiano({
                 type="button"
                 aria-label={`Play ${key.spellings[0]}`}
                 onClick={() => playKey(key)}
-                disabled={isOutOfRange}
-                className={`flex flex-col justify-end absolute top-0 z-10 px-1 pb-2 -translate-x-1/2 rounded-b-sm border border-black/70 text-[9px] font-semibold text-white transition ${
-                  isOutOfRange
+                disabled={isOutOfRange || isDisabled}
+                className={`flex flex-col justify-end absolute top-0 z-10 px-1 pb-2 -translate-x-1/2 rounded-b-sm border text-[9px] font-semibold text-white transition ${
+                  isOutOfRange || isDisabled
                     ? 'bg-zinc-300 border-zinc-300 cursor-default'
-                    : 'bg-zinc-900 hover:bg-black active:bg-zinc-700'
+                    : (() => {
+                        const hlColor = highlightMap.get(key.id);
+                        return hlColor
+                          ? KEY_HIGHLIGHT[hlColor]
+                          : 'border-black/70 bg-zinc-900 hover:bg-black active:bg-zinc-700';
+                      })()
                 }`}
                 style={{
                   width: `${getBlackKeyWidth(zoom)}px`,

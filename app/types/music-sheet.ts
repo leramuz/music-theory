@@ -1,72 +1,12 @@
-export const Clef = {
-  TREBLE: 'treble',
-  BASS: 'bass',
-} as const;
-export type Clef = (typeof Clef)[keyof typeof Clef];
-
-export const TimeSignature = {
-  FOUR_FOUR: '4/4',
-  THREE_FOUR: '3/4',
-  TWO_FOUR: '2/4',
-} as const;
-export type TimeSignature = (typeof TimeSignature)[keyof typeof TimeSignature];
-
-export const KeySignature = {
-  C: 'C',
-  G: 'G',
-  D: 'D',
-  A: 'A',
-  E: 'E',
-  B: 'B',
-  Fs: 'F#',
-  Cs: 'C#',
-  F: 'F',
-  Bb: 'Bb',
-  Eb: 'Eb',
-  Ab: 'Ab',
-  Db: 'Db',
-  Gb: 'Gb',
-  Cb: 'Cb',
-  Am: 'Am',
-  Em: 'Em',
-  Bm: 'Bm',
-  Fsm: 'F#m',
-  Csm: 'C#m',
-  Gsm: 'G#m',
-  Dsm: 'D#m',
-  Asm: 'A#m',
-  Dm: 'Dm',
-  Gm: 'Gm',
-  Cm: 'Cm',
-  Fm: 'Fm',
-  Bbm: 'Bbm',
-  Ebm: 'Ebm',
-  Abm: 'Abm',
-} as const;
-export type KeySignature = (typeof KeySignature)[keyof typeof KeySignature];
-
-export const NoteDuration = {
-  WHOLE: 'w',
-  HALF: 'h',
-  QUARTER: 'q',
-  EIGHTH: '8',
-  SIXTEENTH: '16',
-} as const;
-export type NoteDuration = (typeof NoteDuration)[keyof typeof NoteDuration];
-
-export const VexFlowAccidental = {
-  SHARP: '#',
-  DOUBLE_SHARP: '##',
-  FLAT: 'b',
-  DOUBLE_FLAT: 'bb',
-  NATURAL: 'n',
-} as const;
-export type VexFlowAccidental = (typeof VexFlowAccidental)[keyof typeof VexFlowAccidental];
+import { Accidental } from '@/types/accidental';
+import { NoteDuration } from '@/types/note-duration';
+import { Clef } from '@/types/clef';
 
 export type SheetNote = {
   keys: string[];
   duration: NoteDuration;
-  accidentals?: (VexFlowAccidental | null)[];
+  accidentals?: (Accidental | null)[];
+  highlight?: string;
 };
 
 export type StaveConfig = {

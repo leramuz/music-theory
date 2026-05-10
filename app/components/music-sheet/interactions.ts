@@ -1,5 +1,6 @@
 import { Stave } from 'vexflow';
-import { Clef, StaveClickPayload, NoteClickPayload } from '@/types/music-sheet';
+import { Clef } from '@/types/clef';
+import { StaveClickPayload, NoteClickPayload } from '@/types/music-sheet';
 import { CLEF_NOTE_MAPS, CLEF_TOP_LINE_OFFSET } from '@/components/music-sheet/config';
 
 export function attachInteractions(
@@ -10,12 +11,14 @@ export function attachInteractions(
     staveIndex: number;
     measureIndex: number;
   }[],
+  disableNoteHighlight: boolean,
   callbacks: {
     onNoteClick?: (_payload: NoteClickPayload) => void;
     onStaveClick?: (_payload: StaveClickPayload) => void;
+    isValidStavePosition?: (_noteKey: string) => boolean;
   },
 ) {
-  const { onNoteClick, onStaveClick } = callbacks;
+  const { onNoteClick, onStaveClick, isValidStavePosition } = callbacks;
 
   svgEl.style.pointerEvents = 'auto';
   svgEl.style.cursor = 'pointer';
@@ -23,17 +26,21 @@ export function attachInteractions(
   const highlight = createHighlight(svgEl);
 
   const handleClick = (e: MouseEvent) => {
-    const notePayload = getNotePayload(e.target as Element);
+    if (!disableNoteHighlight) {
+      const notePayload = getNotePayload(e.target as Element);
 
-    if (notePayload) {
-      e.stopPropagation();
-      onNoteClick?.(notePayload);
-      return;
+      if (notePayload) {
+        e.stopPropagation();
+        onNoteClick?.(notePayload);
+        return;
+      }
     }
 
     const stavePayload = getStaveClickPayload(e, svgEl, allStaveMeta);
     if (stavePayload) {
-      onStaveClick?.(stavePayload);
+      if (!isValidStavePosition || isValidStavePosition(stavePayload.noteKey)) {
+        onStaveClick?.(stavePayload);
+      }
     }
   };
 
@@ -52,22 +59,29 @@ export function attachInteractions(
     noteEl.style.filter = '';
   };
 
-  const moveHandler = (e: MouseEvent) => handleMouseMove(e, svgEl, allStaveMeta, highlight);
+  const moveHandler = (e: MouseEvent) =>
+    handleMouseMove(e, svgEl, disableNoteHighlight, allStaveMeta, highlight, isValidStavePosition);
 
   const leaveHandler = () => highlight.hide();
 
   svgEl.addEventListener('click', handleClick);
   svgEl.addEventListener('mousemove', moveHandler);
   svgEl.addEventListener('mouseleave', leaveHandler);
-  svgEl.addEventListener('mouseover', handleHover);
-  svgEl.addEventListener('mouseout', handleHoverOut);
+
+  if (!disableNoteHighlight) {
+    svgEl.addEventListener('mouseover', handleHover);
+    svgEl.addEventListener('mouseout', handleHoverOut);
+  }
 
   return () => {
     svgEl.removeEventListener('click', handleClick);
     svgEl.removeEventListener('mousemove', moveHandler);
     svgEl.removeEventListener('mouseleave', leaveHandler);
-    svgEl.removeEventListener('mouseover', handleHover);
-    svgEl.removeEventListener('mouseout', handleHoverOut);
+
+    if (!disableNoteHighlight) {
+      svgEl.removeEventListener('mouseover', handleHover);
+      svgEl.removeEventListener('mouseout', handleHoverOut);
+    }
   };
 }
 
@@ -157,6 +171,7 @@ function createHighlight(svgEl: SVGSVGElement) {
 function handleMouseMove(
   e: MouseEvent,
   svgEl: SVGSVGElement,
+  disableNoteHighlight: boolean,
   staves: {
     vfStave: Stave;
     clef: Clef;
@@ -164,8 +179,9 @@ function handleMouseMove(
     measureIndex: number;
   }[],
   highlight: ReturnType<typeof createHighlight>,
+  isValidStavePosition?: (_noteKey: string) => boolean,
 ) {
-  if ((e.target as Element).closest('.vf-stavenote')) {
+  if (!disableNoteHighlight && (e.target as Element).closest('.vf-stavenote')) {
     highlight.hide();
     return;
   }
@@ -184,6 +200,12 @@ function handleMouseMove(
 
     const index = Math.round((y - top) / step);
     const snappedY = top + index * step;
+    const noteKey = CLEF_NOTE_MAPS[clef]?.[index + CLEF_TOP_LINE_OFFSET];
+
+    if (noteKey && isValidStavePosition && !isValidStavePosition(noteKey)) {
+      highlight.hide();
+      return;
+    }
 
     highlight.show(vfStave.getX(), snappedY - step / 2 + 0.5, vfStave.getWidth(), step);
     return;

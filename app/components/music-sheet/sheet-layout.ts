@@ -1,4 +1,5 @@
-import { MeasureConfig, Clef } from '@/types/music-sheet';
+import { Clef } from '@/types/clef';
+import { MeasureConfig } from '@/types/music-sheet';
 import { SHEET_DEFAULT_CONFIG } from '@/components/music-sheet/config';
 
 export type StaveLayout = {
@@ -20,8 +21,11 @@ export type SheetLayout = {
   measures: MeasureLayout[];
 };
 
-export function layoutSheet(measures: MeasureConfig[]): SheetLayout {
-  const { measureWidth, measuresPerLine, staveGapY, paddingX, paddingY } = SHEET_DEFAULT_CONFIG;
+export function layoutSheet(
+  measures: MeasureConfig[],
+  measureWidth = SHEET_DEFAULT_CONFIG.measureWidth,
+): SheetLayout {
+  const { measuresPerLine, staveGapY, paddingX, paddingY } = SHEET_DEFAULT_CONFIG;
 
   const numStavesPerMeasure = Math.max(...measures.map((m) => m.staves.length));
   const numLines = Math.ceil(measures.length / measuresPerLine);

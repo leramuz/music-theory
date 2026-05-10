@@ -4,7 +4,9 @@ import {
   removeNoteFromMusicSheet,
   updateNoteInMusicSheet,
 } from '@/helpers/music-sheet';
-import { NoteDuration, MeasureConfig, VexFlowAccidental } from '@/types/music-sheet';
+import { MeasureConfig } from '@/types/music-sheet';
+import { NoteDuration } from '@/types/note-duration';
+import { Accidental } from '@/types/accidental';
 
 const measures = (): MeasureConfig[] => [
   {
@@ -110,9 +112,9 @@ describe('addNoteToMusicSheet', () => {
       { noteKey: 'f/4', measureIndex: 0, staveIndex: 0 },
       NoteDuration.QUARTER,
       0,
-      [VexFlowAccidental.SHARP],
+      [Accidental.SHARP],
     );
-    expect(result[0].staves[0].voices[0].notes[2].accidentals).toEqual([VexFlowAccidental.SHARP]);
+    expect(result[0].staves[0].voices[0].notes[2].accidentals).toEqual([Accidental.SHARP]);
   });
 });
 
@@ -177,10 +179,10 @@ describe('updateNoteInMusicSheet', () => {
     const result = updateNoteInMusicSheet(
       currentMeasures,
       { noteKey: 'c/4', measureIndex: 0, staveIndex: 0, voiceIndex: 0, noteIndex: 0 },
-      { accidentals: [VexFlowAccidental.SHARP] },
+      { accidentals: [Accidental.SHARP] },
     );
     const note = result[0].staves[0].voices[0].notes[0];
-    expect(note.accidentals).toEqual([VexFlowAccidental.SHARP]);
+    expect(note.accidentals).toEqual([Accidental.SHARP]);
     expect(note.keys).toEqual(['c/4']);
     expect(note.duration).toBe(NoteDuration.QUARTER);
   });

@@ -8,7 +8,8 @@
   "nav": {
     "home": "Home",
     "theory": "Theorie",
-    "practice": "Praxis"
+    "practice": "Praxis",
+    "intervals": "Intervalltraining"
   },
   "footer": {
     "copyright": "© 2026 Musiktheorie-App. Alle Rechte vorbehalten."
@@ -24,5 +25,178 @@
     "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
     "retry": "Erneut versuchen",
     "goHome": "Zur Startseite"
+  },
+  "intervals": {
+    "perfectUnison": "Reine Prime",
+    "minorSecond": "Kleine Sekunde",
+    "majorSecond": "Große Sekunde",
+    "augmentedSecond": "Übermäßige Sekunde",
+    "minorThird": "Kleine Terz",
+    "majorThird": "Große Terz",
+    "perfectFourth": "Reine Quarte",
+    "augmentedFourth": "Übermäßige Quarte (Tritonus)",
+    "diminishedFourth": "Verminderte Quarte",
+    "perfectFifth": "Reine Quinte",
+    "augmentedFifth": "Übermäßige Quinte",
+    "diminishedFifth": "Verminderte Quinte (Tritonus)",
+    "minorSixth": "Kleine Sexte",
+    "majorSixth": "Große Sexte",
+    "minorSeventh": "Kleine Septime",
+    "majorSeventh": "Große Septime",
+    "diminishedSeventh": "Verminderte Septime",
+    "perfectOctave": "Reine Oktave"
+  },
+  "practice": {
+    "startTraining": "Training starten",
+    "settings": {
+      "pianoRange": {
+        "title": "Klavierbereich",
+        "description": "Wähle den Bereich der Klaviertasten, den du für das Intervalltraining verwenden möchtest. Je größer der Bereich, desto vielfältiger die Intervalle, die du hören wirst!",
+        "options": {
+          "C3ToC4": "C3 - C4",
+          "C4ToC5": "C4 - C5",
+          "C5ToC6": "C5 - C6",
+          "C3ToC5": "C3 - C5",
+          "C4ToC6": "C4 - C6",
+          "C3ToC6": "C3 - C6"
+        }
+      },
+      "intervals": {
+        "title": "Zu trainierende Intervalle",
+        "description": "Wähle die Intervalle aus, die du trainieren möchtest. Je mehr Intervalle du auswählst, desto abwechslungsreicher wird dein Training!",
+        "groups": {
+          "unisonsAndOctave": "Prime & Oktave",
+          "seconds": "Sekunden",
+          "thirds": "Terzen",
+          "fourths": "Quarten",
+          "fifths": "Quinten",
+          "sixths": "Sexten",
+          "sevenths": "Septimen"
+        }
+      },
+      "answerModes": {
+        "title": "Antwortmodus",
+        "description": "Wähle, wie du deine Antworten eingeben möchtest. Unterschiedliche Modi bieten verschiedene Herausforderungen und helfen dir, dein Gehör auf vielfältige Weise zu schulen!",
+        "modes": {
+          "select": {
+            "label": "Benennen",
+            "desc": "Intervalname auswählen"
+          },
+          "keyboard": {
+            "label": "Spielen",
+            "desc": "Oberen Ton auf der virtuellen Klaviertastatur klicken"
+          },
+          "sheet": {
+            "label": "Notieren",
+            "desc": "Interval auf dem Notensystem platzieren"
+          }
+        }
+      },
+      "playbackModes": {
+        "title": "Abspielmodus",
+        "description": "Wähle, ob die Intervalle melodisch (nacheinander) oder harmonisch (gleichzeitig) abgespielt werden sollen. Melodische Intervalle helfen dir, die individuelle Klangfarbe jedes Tons zu erkennen, während harmonische Intervalle dir beibringen, wie die Töne zusammenklingen!",
+        "modes": {
+          "melodic-ascending": "Melodisch Aufsteigend",
+          "melodic-descending": "Melodisch Absteigend",
+          "harmonic": "Harmonisch"
+        }
+      },
+      "accidental": {
+        "title": "Vorzeichen",
+        "options": {
+          "none": "Keines",
+          "#": "Kreuz (♯)",
+          "b": "Be (♭)",
+          "##": "Doppelkreuz (𝄪)",
+          "n": "Auflösungszeichen (♮)",
+          "bb": "Doppel-Be (𝄫)"
+        }
+      },
+      "key": {
+        "title": "Tonart",
+        "none": "Keine",
+        "scales": {
+          "major": "Dur",
+          "harmonicMinor": "Harmonisches Moll"
+        },
+        "rootNote": {
+          "title": "Grundton",
+          "options": {
+            "C": "C",
+            "C#": "Cis",
+            "Db": "Des",
+            "D": "D",
+            "D#": "Dis",
+            "Eb": "Es",
+            "E": "E",
+            "F": "F",
+            "F#": "Fis",
+            "Gb": "Ges",
+            "G": "G",
+            "G#": "Gis",
+            "Ab": "As",
+            "A": "A",
+            "A#": "Ais",
+            "Bb": "B",
+            "B": "H",
+            "Cb": "Ces"
+          }
+        }
+      }
+    },
+    "intervals": {
+      "title": "Intervalltraining",
+      "description": "Trainiere dein Gehör mit verschiedenen Intervallen. Erhalte ein Gefühl für jedes Intervall und verbessere deine Erkennungsfähigkeiten. Erhalte sofortiges Feedback, um deinen Fortschritt zu verfolgen und die Intervallerkennung zu meistern!",
+      "question": {
+        "title": "Welches Intervall hörst du?",
+        "description": "Hör genau hin, dann gib unten deine Antwort ein.",
+        "play": "Abspielen",
+        "settings": "Einstellungen",
+        "submitAnswer": "Antwort abgeben"
+      },
+      "selectAnswer": {
+        "title": "Intervall auswählen"
+      },
+      "keyboardAnswer": {
+        "title": "Oberen Ton klicken",
+        "description": "Die <blue>blaue</blue> Taste ist der Grundton. Klicke auf die Taste, die das Intervall vervollständigt.",
+        "bottomNote": "Grundton (vorgegeben)",
+        "yourAnswer": "Deine Antwort"
+      },
+      "sheetAnswer": {
+        "title": "Oberen Ton im Notensystem platzieren",
+        "description": "Wähle bei Bedarf ein Vorzeichen, dann klicke auf das Notensystem."
+      },
+      "feedbackPhase": {
+        "correct": {
+          "correct": "Richtig!",
+          "perfect": "Perfekt!",
+          "wellDone": "Gut gemacht!",
+          "keepItUp": "Weiter so!"
+        },
+        "partiallyCorrect": "Teils richtig!",
+        "incorrect": {
+          "notQuite": "Nicht ganz…",
+          "almost": "Fast!"
+        },
+        "youAnswered": "Du hast <strong>{answered}</strong> geantwortet — die richtige Antwort war <strong>{correct}</strong>.",
+        "thatsA": "Das ist <strong>{interval}</strong>!",
+        "note": "Hinweis",
+        "enharmonicIntervals": "Diese Intervalle sind enharmonisch, das heißt, sie klingen gleich, haben aber unterschiedliche Namen, und werden anders notiert.",
+        "redundantNatural": "{note} braucht kein Auflösungszeichen — es ist von Natur aus ein Stammton.",
+        "redundantKeyAccidental": "Das Vorzeichen bei {note} ist bereits durch die Tonart vorgegeben.",
+        "notInScale": {
+          "major": "{note} gehört nicht zur {tonic}-Dur-Tonleiter.",
+          "harmonicMinor": "{note} gehört nicht zur harmonischen {tonic}-Moll-Tonleiter."
+        },
+        "correctAnswerLabel": "Richtige Antwort",
+        "yourAnswerLabel": "Deine Antwort",
+        "playCorrectAriaLabel": "Richtige Antwort abspielen",
+        "playAnswerAriaLabel": "Deine Antwort abspielen",
+        "settings": "Einstellungen",
+        "nextQuestion": "Nächste Frage",
+        "unknownInterval": "Unbekanntes Intervall"
+      }
+    }
   }
 }

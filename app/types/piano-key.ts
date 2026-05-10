@@ -1,27 +1,4 @@
-export const Natural = {
-  A: 'A',
-  B: 'B',
-  C: 'C',
-  D: 'D',
-  E: 'E',
-  F: 'F',
-  G: 'G',
-} as const;
-export type Natural = (typeof Natural)[keyof typeof Natural];
-
-export const Accidental = {
-  SHARP: '#',
-  FLAT: 'b',
-  DOUBLE_SHARP: 'x',
-  NATURAL: 'n',
-  DOUBLE_FLAT: 'bb',
-} as const;
-export type Accidental = (typeof Accidental)[keyof typeof Accidental];
-
-export type Octave = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-
-type PitchSpelling = `${Natural}${Accidental}${Octave}` | `${Natural}${Octave}`;
-type EnharmonicSpellings = readonly [PitchSpelling, ...PitchSpelling[]];
+import { EnharmonicSpellings } from '@/types/pitch-spelling';
 
 export type PianoKey = {
   id: PianoKeyId;
